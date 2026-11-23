@@ -1,0 +1,133 @@
+{
+    "title": "Device Status S",
+    "sub": "Local Data",
+    "cooling": 60,
+    "cpu": "high / 70c / 4.8 ghz",
+    "keyboard": "pluged / keychron",
+    "memory": "768 GB / 8192 GB",
+    "monitor": "Alienware OLED 175 Hz",
+    "mouse": "logitech MX master 3",
+    "wifi": "wifi 6 / NETGEAR - N90",
+    "speed": 150,
+    "voltage": "9 v / 64 ma",
+    "fan_title": "Fans Args",
+    "screen_resolution_v2": {
+        "x": 3440.0,
+        "y": 1440.0
+    },
+    "cursor_position_v2": {
+        "x": 1024.0,
+        "y": 768.0
+    },
+    "panel_offset_v2": {
+        "x": -20.0,
+        "y": 12.0
+    },
+    "camera_position_v3": {
+        "x": 1.2,
+        "y": 3.6,
+        "z": -4.8
+    },
+    "device_rotation_v3": {
+        "x": 15.0,
+        "y": 315.0,
+        "z": 0.0
+    },
+    "gravity_vector_v3": {
+        "x": 0.0,
+        "y": -9.81,
+        "z": 0.0
+    },
+    "rotation_v4": {
+        "x": 0.0,
+        "y": 0.3827,
+        "z": 0.0,
+        "w": 0.9239
+    },
+    "quaternion_v4": {
+        "x": 0.0,
+        "y": 0.3827,
+        "z": 0.0,
+        "w": 0.9239
+    },
+    "rect_value": {
+        "serializedVersion": "2",
+        "x": 25.0,
+        "y": 5.0,
+        "width": 3.0,
+        "height": 8.0
+    },
+    "rectoffset_value": {
+        "m_Left": 31,
+        "m_Right": 56,
+        "m_Top": 21,
+        "m_Bottom": 84
+    },
+    "color_tint_v4": {
+        "x": 0.9,
+        "y": 0.1,
+        "z": 0.7,
+        "w": 0.8
+    },
+    "uv_scale_offset_v4": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 0.2,
+        "w": 0.8
+    },
+    "theme_primary_color": {
+        "r": 0.0,
+        "g": 0.7,
+        "b": 0.7,
+        "a": 1.0
+    },
+    "status_led_color": {
+        "r": 1.0,
+        "g": 0.4,
+        "b": 0.0,
+        "a": 1.0
+    },
+    "warning_overlay_color": {
+        "r": 0.8,
+        "g": 0.8,
+        "b": 0.0,
+        "a": 0.6
+    },
+    "panel_background_color": {
+        "r": 0.1,
+        "g": 0.12,
+        "b": 0.14,
+        "a": 1.0
+    },
+    "text_highlight_color": {
+        "r": 0.7,
+        "g": 0.9,
+        "b": 0.9,
+        "a": 1.0
+    },
+    "fan_rpm": 2650,
+    "fan_mode": "auto / performance",
+    "fan_count": 5,
+    "power_draw_wat": 120.0,
+    "uptime_seconds": 1560000,
+    "is_charging": false,
+    "last_sync_time": "2025-11-18T16:45:00Z",
+    "firmware_version": "v3.3.1",
+    "device_id": "xs-device-0007",
+    "sensor_labels": [
+        "cpu",
+        "gpu",
+        "ram",
+        "ssd",
+        "vrm"
+    ],
+    "temperature_history": [
+        68,
+        70,
+        69,
+        67,
+        66,
+        65,
+        64
+    ]
+}

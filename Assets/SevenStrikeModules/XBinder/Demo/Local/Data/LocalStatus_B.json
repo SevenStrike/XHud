@@ -1,0 +1,132 @@
+{
+    "title": "Device Status B",
+    "sub": "Local Data",
+    "cooling": 49,
+    "cpu": "high / 72c / 4.7 ghz",
+    "keyboard": "pluged / asus rog",
+    "memory": "320 GB / 6144 GB",
+    "monitor": "Philips Momentum VA 165 Hz",
+    "mouse": "asus rog gladius",
+    "wifi": "wifi 6 / ASUS - RT-AX86",
+    "speed": 138,
+    "voltage": "9 v / 58 ma",
+    "fan_title": "Fans Args",
+    "screen_resolution_v2": {
+        "x": 2880.0,
+        "y": 1800.0
+    },
+    "cursor_position_v2": {
+        "x": 640.0,
+        "y": 360.0
+    },
+    "panel_offset_v2": {
+        "x": -18.0,
+        "y": 14.0
+    },
+    "camera_position_v3": {
+        "x": -2.8,
+        "y": 2.1,
+        "z": 3.4
+    },
+    "device_rotation_v3": {
+        "x": 12.0,
+        "y": 120.0,
+        "z": -6.0
+    },
+    "gravity_vector_v3": {
+        "x": 0.0,
+        "y": -9.81,
+        "z": 0.0
+    },
+    "rotation_v4": {
+        "x": 0.0,
+        "y": 0.3827,
+        "z": 0.0,
+        "w": 0.9239
+    },
+    "quaternion_v4": {
+        "x": 0.0,
+        "y": 0.3827,
+        "z": 0.0,
+        "w": 0.9239
+    },
+    "rect_value": {
+        "serializedVersion": "2",
+        "x": 25.0,
+        "y": 5.0,
+        "width": 3.0,
+        "height": 8.0
+    },
+    "rectoffset_value": {
+        "m_Left": 31,
+        "m_Right": 56,
+        "m_Top": 21,
+        "m_Bottom": 84
+    },
+    "color_tint_v4": {
+        "x": 0.45,
+        "y": 0.25,
+        "z": 0.85,
+        "w": 0.6
+    },
+    "uv_scale_offset_v4": {
+        "x": 1.6,
+        "y": 1.6,
+        "z": 0.35,
+        "w": 0.65
+    },
+    "theme_primary_color": {
+        "r": 0.3,
+        "g": 0.5,
+        "b": 0.9,
+        "a": 1.0
+    },
+    "status_led_color": {
+        "r": 1.0,
+        "g": 0.3,
+        "b": 0.7,
+        "a": 1.0
+    },
+    "warning_overlay_color": {
+        "r": 0.9,
+        "g": 0.5,
+        "b": 0.1,
+        "a": 0.72
+    },
+    "panel_background_color": {
+        "r": 0.13,
+        "g": 0.11,
+        "b": 0.16,
+        "a": 1.0
+    },
+    "text_highlight_color": {
+        "r": 0.9,
+        "g": 0.9,
+        "b": 1.0,
+        "a": 1.0
+    },
+    "fan_rpm": 2200,
+    "fan_mode": "manual / performance",
+    "fan_count": 4,
+    "power_draw_wat": 105.0,
+    "uptime_seconds": 1980000,
+    "is_charging": false,
+    "last_sync_time": "2025-11-19T13:25:00Z",
+    "firmware_version": "v3.5.2",
+    "device_id": "xs-device-0014",
+    "sensor_labels": [
+        "cpu",
+        "gpu",
+        "ram",
+        "psu"
+    ],
+    "temperature_history": [
+        68,
+        72,
+        70,
+        69,
+        67,
+        66,
+        65
+    ]
+}

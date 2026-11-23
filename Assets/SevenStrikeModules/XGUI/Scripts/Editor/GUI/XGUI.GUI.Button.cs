@@ -54,7 +54,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 该方法提供完整的按钮样式定制能力，包括正常和按下两种状态的填充样式、颜色和文本颜色。
         /// 按钮的边距和内边距在样式默认值基础上进行叠加，便于微调布局。
         /// </remarks>
-        public static bool gui_button(Rect rect = default, string text = "button", string tooltip = "clicked", XGUIGroup btn_fill = XGUIGroup.实体, XGUIColor btn_color = XGUIColor.亮白, Color btn_color_gui = default, Color btn_text_color = default, XGUIGroup press_fill = XGUIGroup.实体, XGUIColor press_color = XGUIColor.深空灰, Color press_text_color = default, XGUIFontSize font_size = XGUIFontSize.B, TextAnchor anchor = TextAnchor.MiddleCenter, RectOffset margin = default, RectOffset padding = default, float width = 0, float height = 0, Font button_text_font = null, string focus_name = null)
+        public static bool gui_button(Rect rect = default, string text = "button", string tooltip = "clicked", XGUIGroup btn_fill = XGUIGroup.实体, XGUIColor btn_color = XGUIColor.亮白, Color btn_color_gui = default, Color btn_text_color = default, XGUIGroup press_fill = XGUIGroup.实体, XGUIColor press_color = XGUIColor.深空灰, Color press_text_color = default, XGUIFontSize font_size = XGUIFontSize.B, TextAnchor anchor = TextAnchor.MiddleCenter, RectOffset margin = default, RectOffset padding = default, float width = 0, float height = 0, Font button_text_font = null, TextClipping clipping = TextClipping.Clip, string focus_name = null)
         {
             if (btn_text_color == Color.clear)
                 btn_text_color = Color.white;
@@ -97,7 +97,7 @@ namespace SevenStrikeModules.XGUI.Editor
             style.padding = new RectOffset(_p.left + padding.left, _p.right + padding.right, _p.top + padding.top, _p.bottom + padding.bottom + 4);
 
             style.margin = new RectOffset(_m.left + margin.left, _m.right + margin.right, _m.top + margin.top, _m.bottom + margin.bottom);
-
+            style.clipping = clipping;
             if (width != 0)
                 style.fixedWidth = width;
             if (height != 0)

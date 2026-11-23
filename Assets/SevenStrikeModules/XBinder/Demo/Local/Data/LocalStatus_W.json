@@ -1,0 +1,130 @@
+{
+    "title": "Device Status W",
+    "sub": "Local Data",
+    "cooling": 33,
+    "cpu": "normal / 44c / 3.6 ghz",
+    "keyboard": "pluged / hyperx",
+    "memory": "256 GB / 4096 GB",
+    "monitor": "BenQ ZOWIE TN 240 Hz",
+    "mouse": "hyperx pulsefire",
+    "wifi": "wifi 5 / ASUS - RT66",
+    "speed": 10,
+    "voltage": "5 v / 22 ma",
+    "fan_title": "Fan Info",
+    "screen_resolution_v2": {
+        "x": 1920.0,
+        "y": 1200.0
+    },
+    "cursor_position_v2": {
+        "x": 256.0,
+        "y": 512.0
+    },
+    "panel_offset_v2": {
+        "x": 8.0,
+        "y": -8.0
+    },
+    "camera_position_v3": {
+        "x": -2.0,
+        "y": 1.0,
+        "z": 2.0
+    },
+    "device_rotation_v3": {
+        "x": 0.0,
+        "y": 135.0,
+        "z": 0.0
+    },
+    "gravity_vector_v3": {
+        "x": 0.0,
+        "y": -9.81,
+        "z": 0.0
+    },
+    "rotation_v4": {
+        "x": 0.0,
+        "y": 0.3827,
+        "z": 0.0,
+        "w": 0.9239
+    },
+    "quaternion_v4": {
+        "x": 0.0,
+        "y": 0.3827,
+        "z": 0.0,
+        "w": 0.9239
+    },
+    "rect_value": {
+        "serializedVersion": "2",
+        "x": 25.0,
+        "y": 5.0,
+        "width": 3.0,
+        "height": 8.0
+    },
+    "rectoffset_value": {
+        "m_Left": 31,
+        "m_Right": 56,
+        "m_Top": 21,
+        "m_Bottom": 84
+    },
+    "color_tint_v4": {
+        "x": 0.3,
+        "y": 0.6,
+        "z": 0.9,
+        "w": 1.0
+    },
+    "uv_scale_offset_v4": {
+        "x": 0.5,
+        "y": 0.5,
+        "z": 0.75,
+        "w": 0.25
+    },
+    "theme_primary_color": {
+        "r": 0.9,
+        "g": 0.5,
+        "b": 0.1,
+        "a": 1.0
+    },
+    "status_led_color": {
+        "r": 0.0,
+        "g": 0.6,
+        "b": 1.0,
+        "a": 1.0
+    },
+    "warning_overlay_color": {
+        "r": 1.0,
+        "g": 0.8,
+        "b": 0.0,
+        "a": 0.5
+    },
+    "panel_background_color": {
+        "r": 0.15,
+        "g": 0.1,
+        "b": 0.05,
+        "a": 1.0
+    },
+    "text_highlight_color": {
+        "r": 0.9,
+        "g": 0.8,
+        "b": 0.5,
+        "a": 1.0
+    },
+    "fan_rpm": 1320,
+    "fan_mode": "auto / balanced",
+    "fan_count": 3,
+    "power_draw_wat": 55.0,
+    "uptime_seconds": 72000,
+    "is_charging": true,
+    "last_sync_time": "2025-11-21T11:30:00Z",
+    "firmware_version": "v2.6.3",
+    "device_id": "xs-device-0006",
+    "sensor_labels": [
+        "cpu",
+        "gpu",
+        "ssd"
+    ],
+    "temperature_history": [
+        44,
+        45,
+        43,
+        44,
+        46,
+        45
+    ]
+}

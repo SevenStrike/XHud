@@ -31,7 +31,7 @@ namespace SevenStrikeModules.XGUI.Editor
     /// </summary>
     public static partial class XGUI
     {
-        public static AnimationCurve gui_curvefield(Rect rect, AnimationCurve prop, string title = null, float title_width = 40, Color title_color = default, string icon = "icon_field_status", Color icon_color = default, string state_title = "当前", string state_value = "-", Color state_value_color = default, Action<AnimationCurve> setcurve = null, bool useutility = true)
+        public static AnimationCurve gui_curvefield(Rect rect, AnimationCurve prop, string title = null, float title_width = 40, Color title_color = default, string icon = "icon_dot", Color icon_color = default, string state_title = "当前", string state_value = "-", Color state_value_color = default, Action<AnimationCurve> setcurve = null, bool useutility = true)
         {
             if (icon_color == Color.clear)
                 icon_color = Color.white;
@@ -50,7 +50,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 prop: prop,
                 title_size: XGUIFontSize.M,
                 //title_color: Color.white,
-                //status_icon: "icon_field_status",
+                //status_icon: "icon_dot",
                 //status_icon_color: Color.red,
                 title_anchor: TextAnchor.MiddleLeft,
                 title_width: title_width);

@@ -48,7 +48,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "辅助颜色 - 线",
                 title_width: 140,
                 //title_color: Color.white,
-                //icon: "icon_field_status",
+                //icon: "icon_dot",
                 //icon_color: Color.red,
                 state_title: "Hex：",
                 state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_cg_color.colorValue)}",
@@ -61,7 +61,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "辅助颜色 - 点",
                 title_width: 140,
                 //title_color: Color.white,
-                //icon: "icon_field_status",
+                //icon: "icon_dot",
                 //icon_color: Color.red,
                 state_title: "Hex：",
                 state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_cg_point_color.colorValue)}",
@@ -171,7 +171,7 @@ namespace SevenStrikeModules.XHud.Editor
                             //title_color: Color.white,
                             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             title_width: 90,
-                            //status_icon: "icon_field_status",
+                            //status_icon: "icon_dot",
                             prop: sp_cg_mirror_ud_offset,
                             prop_margin: new RectOffset(0, 0, 5, 0));
                     }
@@ -184,7 +184,7 @@ namespace SevenStrikeModules.XHud.Editor
                         //title_color: Color.white,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        //status_icon: "icon_field_status",
+                        //status_icon: "icon_dot",
                         prop: sp_cg_editor_serializefield_center_point_size,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
@@ -258,7 +258,7 @@ namespace SevenStrikeModules.XHud.Editor
                             //title_color: Color.white,
                             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             title_width: 90,
-                            //status_icon: "icon_field_status",
+                            //status_icon: "icon_dot",
                             prop: sp_cg_mirror_lr_offset,
                             prop_margin: new RectOffset(0, 0, 5, 0));
                     }
@@ -271,7 +271,7 @@ namespace SevenStrikeModules.XHud.Editor
                         //title_color: Color.white,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        //status_icon: "icon_field_status",
+                        //status_icon: "icon_dot",
                         prop: sp_cg_editor_serializefield_center_point_size,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
@@ -369,7 +369,7 @@ namespace SevenStrikeModules.XHud.Editor
                         //title_color: Color.white,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        //status_icon: "icon_field_status",
+                        //status_icon: "icon_dot",
                         prop: sp_cg_editor_serializefield_corner_lookat_offset_h,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
@@ -381,7 +381,7 @@ namespace SevenStrikeModules.XHud.Editor
                         //title_color: Color.white,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        //status_icon: "icon_field_status",
+                        //status_icon: "icon_dot",
                         prop: sp_cg_editor_serializefield_corner_lookat_offset_v,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
@@ -393,7 +393,7 @@ namespace SevenStrikeModules.XHud.Editor
                         //title_color: Color.white,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        //status_icon: "icon_field_status",
+                        //status_icon: "icon_dot",
                         prop: sp_cg_editor_serializefield_center_point_size,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
@@ -437,7 +437,7 @@ namespace SevenStrikeModules.XHud.Editor
                         //title_color: Color.white,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        //status_icon: "icon_field_status",
+                        //status_icon: "icon_dot",
                         prop: sp_cg_editor_serializefield_three_offset_h,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
@@ -449,7 +449,7 @@ namespace SevenStrikeModules.XHud.Editor
                         //title_color: Color.white,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        //status_icon: "icon_field_status",
+                        //status_icon: "icon_dot",
                         prop: sp_cg_editor_serializefield_three_offset_v,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
@@ -461,7 +461,7 @@ namespace SevenStrikeModules.XHud.Editor
                         //title_color: Color.white,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        //status_icon: "icon_field_status",
+                        //status_icon: "icon_dot",
                         prop: sp_cg_editor_serializefield_three_offset_coverage,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 

@@ -825,7 +825,7 @@ namespace SevenStrikeModules.XHud.Editor
                      field_height: XGUI.GetSingleLineHeight(),
                      field_text_color: Color.white,
                      //title_width: 40,
-                     //status_icon: "icon_field_status",
+                     //status_icon: "icon_dot",
                      //status_icon_color: Color.magenta,
                      field_text_font: XGUI.GetFont("xg-medium"),
                      field_text_style: FontStyle.Normal,
@@ -841,7 +841,7 @@ namespace SevenStrikeModules.XHud.Editor
             drawelement_rect.Set(rect.width - 120, titleheight, 100, line_height);
             XGUI.gui_property_field(
                            rect: drawelement_rect,
-                           //status_icon: "icon_field_status",
+                           //status_icon: "icon_dot",
                            //status_icon_color: Color.red,
                            prop: sp_clip);
             #endregion

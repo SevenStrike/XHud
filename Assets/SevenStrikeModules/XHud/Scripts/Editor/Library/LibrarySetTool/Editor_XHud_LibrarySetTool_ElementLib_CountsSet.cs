@@ -169,7 +169,7 @@ namespace SevenStrikeModules.XHud.Editor
                 //title_color: Color.white,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
-                //status_icon: "icon_field_status",
+                //status_icon: "icon_dot",
                 //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop_padding: new RectOffset(20, 20, 0, 0),
                 prop: sp_initialize_counts);

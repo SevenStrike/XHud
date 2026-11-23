@@ -522,7 +522,7 @@ namespace SevenStrikeModules.XHud.Editor
                 field_text_font: XGUI.GetFont("xg-medium"),
                 field_text_style: FontStyle.Normal,
                 field_text_anchor: TextAnchor.MiddleLeft);
-            //status_icon: "icon_field_status",
+            //status_icon: "icon_dot",
             //status_icon_color: Color.green);
 
             sp_color_name.serializedObject.ApplyModifiedProperties();
@@ -534,7 +534,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "颜色",
                 title_width: 80,
                 title_color: Color.white,
-                //icon: "icon_field_status",
+                //icon: "icon_dot",
                 //icon_color: Color.red,
                 state_title: "Hex：",
                 state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_color.colorValue)}",

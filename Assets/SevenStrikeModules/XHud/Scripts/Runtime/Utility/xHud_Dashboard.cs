@@ -759,7 +759,9 @@ namespace SevenStrikeModules.XHud
 
             XGUI_Utilitys.Console("XHud 仪表盘消息", $"已将主题颜色重置到默认状态！", XGUIMsgState.确认);
 
+#if UNITY_EDITOR
             config_save();
+#endif
         }
         /// <summary>
         /// 按主题颜色类型读取当前颜色
@@ -802,7 +804,9 @@ namespace SevenStrikeModules.XHud
                     XGUI_Utilitys.Console("XHud 仪表盘消息", $"已将主题分割线颜色设为：{color}！", XGUIMsgState.确认);
                     break;
             }
+#if UNITY_EDITOR
             config_save();
+#endif
         }
         /// <summary>
         /// 按预设名称设置主色调

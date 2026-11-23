@@ -337,7 +337,7 @@ namespace SevenStrikeModules.XHud.Editor
             sizebg = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_diagnostic/sizebg");
             perspective = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_diagnostic/perspective");
             orthorgrphic = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_diagnostic/orthorgrphic");
-            status_dot = XGUI.GetBasedIcon("icon_field_status");
+            status_dot = XGUI.GetBasedIcon("icon_dot");
             #endregion
 
             hex_primary_color = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), false);

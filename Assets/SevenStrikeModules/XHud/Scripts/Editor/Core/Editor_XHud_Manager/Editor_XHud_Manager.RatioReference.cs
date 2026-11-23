@@ -89,7 +89,7 @@ namespace SevenStrikeModules.XHud.Editor
                 //title_color: Color.white,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 200,
-                //status_icon: "icon_field_status",
+                //status_icon: "icon_dot",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: sp_hmr_physics_screen_size,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -105,7 +105,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "图例着色",
                 title_width: 80,
                 //title_color: Color.white,
-                //icon: "icon_field_status",
+                //icon: "icon_dot",
                 //icon_color: Color.red,
                 state_title: "Hex：",
                 state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_hmr_reference_image_color.colorValue)}",
@@ -124,7 +124,7 @@ namespace SevenStrikeModules.XHud.Editor
                 //title_color: Color.white,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 140,
-                //status_icon: "icon_field_status",
+                //status_icon: "icon_dot",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: sp_hmr_res_full.FindPropertyRelative(nameof(XHudRatioReferenceRes.size)),
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -137,7 +137,7 @@ namespace SevenStrikeModules.XHud.Editor
                 //title_color: Color.white,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 140,
-                //status_icon: "icon_field_status",
+                //status_icon: "icon_dot",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: sp_hmr_res_full.FindPropertyRelative(nameof(XHudRatioReferenceRes.sprite)),
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -155,7 +155,7 @@ namespace SevenStrikeModules.XHud.Editor
                 //title_color: Color.white,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 140,
-                //status_icon: "icon_field_status",
+                //status_icon: "icon_dot",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: sp_hmr_res_part.FindPropertyRelative(nameof(XHudRatioReferenceRes.size)),
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -168,7 +168,7 @@ namespace SevenStrikeModules.XHud.Editor
                 //title_color: Color.white,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 140,
-                //status_icon: "icon_field_status",
+                //status_icon: "icon_dot",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: sp_hmr_res_part.FindPropertyRelative(nameof(XHudRatioReferenceRes.sprite)),
                 prop_margin: new RectOffset(0, 0, 5, 0));

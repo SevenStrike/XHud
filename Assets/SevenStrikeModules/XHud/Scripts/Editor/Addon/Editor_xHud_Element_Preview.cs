@@ -1403,7 +1403,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: width,
-                //status_icon: status_color == Color.clear ? null : "icon_field_status",
+                //status_icon: status_color == Color.clear ? null : "icon_dot",
                 //status_icon_color: status_color,
                 prop: prop,
                 prop_margin: new RectOffset(0, 0, 5, 10));

@@ -715,7 +715,7 @@ namespace SevenStrikeModules.XHud.Editor
                     field_height: 20,
                     field_text_color: Color.white,
                     title_width: 25,
-                    //status_icon: "icon_field_status",
+                    //status_icon: "icon_dot",
                     //status_icon_color: Color.green,
                     field_text_font: XGUI.GetFont("xg-medium"),
                     field_text_style: FontStyle.Normal,

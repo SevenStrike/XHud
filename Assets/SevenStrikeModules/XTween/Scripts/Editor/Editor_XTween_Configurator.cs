@@ -884,7 +884,7 @@ namespace SevenStrikeModules.XTween.Editor
                 title_anchor: TextAnchor.MiddleLeft,
                 title_hover_color: XTween_Dashboard.Theme_Primary,
                 title_width: width,
-                //status_icon: "icon_field_status",
+                //status_icon: "icon_dot",
                 //status_icon_color: Color.green,
                 prop: prop,
                 prop_margin: new RectOffset(0, 0, 5, 0));

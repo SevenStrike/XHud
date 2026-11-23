@@ -82,7 +82,7 @@ namespace SevenStrikeModules.XHud.Editor
             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
             prop: sp_mos_mouse_cursor,
-            status_icon: "icon_field_status",
+            status_icon: "icon_dot",
             status_icon_color: sp_mos_mouse_cursor.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
             prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
@@ -94,7 +94,7 @@ namespace SevenStrikeModules.XHud.Editor
             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
             prop: sp_trans_transition_controller,
-            status_icon: "icon_field_status",
+            status_icon: "icon_dot",
             status_icon_color: sp_trans_transition_controller.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
             prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion

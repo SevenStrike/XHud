@@ -1232,7 +1232,7 @@ namespace SevenStrikeModules.XHud.Editor
             icon_add_tween_p = XGUI.GetCustomIcon($"{iconRoot}icon_add_tween_p");
             // ── 时间飞梭头部图标 ──
             icon_playhead = XGUI.GetCustomIcon($"{iconRoot}icon_playhead");
-            icon_led = XGUI.GetBasedIcon("icon_field_status");
+            icon_led = XGUI.GetBasedIcon("icon_dot");
 
             // ── 播放控制图标 ──
             icon_playback_home_r = XGUI.GetCustomIcon($"{iconRoot}icon_playback_home_r");
@@ -1883,7 +1883,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text_color: Color.white * 0.85f,
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0),
-                offset: new Vector2(0, 3),
+                offset: new Vector2(0, 2),
                 clipping: TextClipping.Clip,
                 font_style: FontStyle.Normal,
                 anchor: TextAnchor.MiddleLeft,

@@ -66,7 +66,7 @@ namespace SevenStrikeModules.XHud.Editor
              title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_width: 100,
              prop: sp_pool_sounder_count,
-             //status_icon: "icon_field_status",
+             //status_icon: "icon_dot",
              //status_icon_color: Lib_TextStyleLibrary.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
              prop_margin: new RectOffset(0, 0, 10, 10));
 

@@ -229,7 +229,7 @@ namespace SevenStrikeModules.XHud.Editor
                     //title_color: Color.white,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 100,
-                    //status_icon: "icon_field_status",
+                    //status_icon: "icon_dot",
                     //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                     prop: sp_target_camera,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -436,7 +436,7 @@ namespace SevenStrikeModules.XHud.Editor
                         //title_color: Color.white,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 100,
-                        //status_icon: "icon_field_status",
+                        //status_icon: "icon_dot",
                         //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                         prop: sp_pixels,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -450,7 +450,7 @@ namespace SevenStrikeModules.XHud.Editor
                      //title_color: Color.white,
                      title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                      title_width: 100,
-                     //status_icon: "icon_field_status",
+                     //status_icon: "icon_dot",
                      //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                      prop: sp_ui_camera_bg_color,
                      prop_margin: new RectOffset(0, 0, 5, 10));
@@ -476,7 +476,7 @@ namespace SevenStrikeModules.XHud.Editor
                     btn_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     btn_fontsize: XGUIFontSize.M,
                     default_name: "default",
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: XGUI_Utilitys.PathExists(base_script.cap_path) ? Color.green : Color.red,
                     on_path_changed: (val) =>
                     {
@@ -491,7 +491,7 @@ namespace SevenStrikeModules.XHud.Editor
                      //title_color: Color.white,
                      title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                      title_width: 100,
-                     //status_icon: "icon_field_status",
+                     //status_icon: "icon_dot",
                      //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                      prop: sp_cap_name,
                      prop_margin: new RectOffset(0, 0, 5, 0));

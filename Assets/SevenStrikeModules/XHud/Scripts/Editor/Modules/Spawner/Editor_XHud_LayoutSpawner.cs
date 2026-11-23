@@ -320,7 +320,7 @@ namespace SevenStrikeModules.XHud.Editor
             icon_locate_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_layout_spawner/icon_locate_r");
             icon_locate_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_layout_spawner/icon_locate_p");
             icon_elementicon = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_layout_spawner/icon_elementicon");
-            icon_dot = XGUI.GetBasedIcon("icon_field_status");
+            icon_dot = XGUI.GetBasedIcon("icon_dot");
             icon_icon_unfold_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_layout_spawner/icon_unfold_r");
             icon_icon_unfold_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_layout_spawner/icon_unfold_p");
             icon_anim_fold_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_layout_spawner/icon_anim_fold_r");

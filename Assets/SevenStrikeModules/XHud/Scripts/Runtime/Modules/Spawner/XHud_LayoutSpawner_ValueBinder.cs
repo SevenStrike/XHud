@@ -28,18 +28,18 @@ namespace SevenStrikeModules.XHud
     [Serializable]
     public struct ElementBinder
     {
-        [SerializeField] public string Name;
-        [SerializeField] public string ID;
-        [SerializeField] public bool IsExpanded;
-        [SerializeField] public bool IsEnabled;
+        [SerializeField] public string name;
+        [SerializeField] public string id;
+        [SerializeField] public bool is_expanded;
+        [SerializeField] public bool is_enabled;
         public PrimitiveBinder[] binders;
     }
 
     [Serializable]
     public struct PrimitiveBinder
     {
-        [SerializeField] public string Name;
-        [SerializeField] public string ID;
+        [SerializeField] public string name;
+        [SerializeField] public string id;
         [SerializeField] public string val_string;
         [SerializeField] public Sprite val_sprite;
         [SerializeField] public Texture2D val_texture;
@@ -51,7 +51,25 @@ namespace SevenStrikeModules.XHud
     {
         [SerializeField] public XHud_LayoutSpawner layoutspawner;
         [SerializeField] public ElementBinder[] valuebinders;
-        [SerializeField] public bool UseDebug;
+        [SerializeField] public bool use_debug;
+
+        #region 折叠
+        public bool
+            fold_option = true,
+            fold_based = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_option = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool option = true, bool based = true)
+        {
+            fold_option = option;
+            fold_based = based;
+        }
+        #endregion
 
         void OnEnable()
         {
@@ -90,9 +108,9 @@ namespace SevenStrikeModules.XHud
                 ElementBinder valuebinder = valuebinders[i];
 
                 // 如果绑定器的目标ID和当前生成的元素项ID匹配
-                if (ID == valuebinder.ID)
+                if (ID == valuebinder.id)
                 {
-                    if (!valuebinder.IsEnabled)
+                    if (!valuebinder.is_enabled)
                         continue;
 
                     // 遍历绑定器中的图元控制器绑定器列表来和元素下的所有图元控制器匹配ID
@@ -104,7 +122,7 @@ namespace SevenStrikeModules.XHud
                 }
             }
 
-            if (UseDebug)
+            if (use_debug)
             {
                 string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
@@ -114,7 +132,7 @@ namespace SevenStrikeModules.XHud
 
         public virtual void on_despawn_with_id(XHudSpace space, XHud_Module_Element element, string ID)
         {
-            if (UseDebug)
+            if (use_debug)
             {
                 string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
@@ -131,11 +149,11 @@ namespace SevenStrikeModules.XHud
         {
             if (element == null)
                 return;
-            XHud_Module_Primitive_Controller con = element.GetPrimitiveController_With_ID(binder.ID);
+            XHud_Module_Primitive_Controller con = element.GetPrimitiveController_With_ID(binder.id);
             if (con == null)
                 return;
             // 如果图元控制器的ID和图元绑定器ID匹配，则根据图元控制器的类型修改内容
-            if (binder.ID == con.id)
+            if (binder.id == con.id)
             {
                 ModuleType type = con.GetModuleType();
                 switch (type)

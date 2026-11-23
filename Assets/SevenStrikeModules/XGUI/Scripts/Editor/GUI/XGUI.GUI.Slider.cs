@@ -240,7 +240,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     field_text_font: XGUI.GetFont("xg-medium"),
                     field_text_style: FontStyle.Normal,
                     field_text_anchor: TextAnchor.MiddleLeft,
-                    //status_icon: "icon_field_status",
+                    //status_icon: "icon_dot",
                     //status_icon_color: Color.red,
                     field_padding: new RectOffset(5, 5, 0, 0),
                     field_margin: new RectOffset(0, 0, 0, 0));
@@ -258,7 +258,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     field_text_font: XGUI.GetFont("xg-medium"),
                     field_text_style: FontStyle.Normal,
                     field_text_anchor: TextAnchor.MiddleLeft,
-                    //status_icon: "icon_field_status",
+                    //status_icon: "icon_dot",
                     //status_icon_color: Color.red,
                     field_padding: new RectOffset(5, 5, 0, 0),
                     field_margin: new RectOffset(0, 0, 0, 0));

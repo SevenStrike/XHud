@@ -3346,7 +3346,7 @@ foldout: base_script.fold_component);
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        status_icon: "icon_field_status",
+                        status_icon: "icon_dot",
                         status_icon_color: sp_canvasgroup.objectReferenceValue == null ? Color.gray : XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         prop: sp_canvasgroup,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -3358,7 +3358,7 @@ foldout: base_script.fold_component);
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        status_icon: "icon_field_status",
+                        status_icon: "icon_dot",
                         status_icon_color: sp_rect_transform.objectReferenceValue == null ? Color.gray : XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         prop: sp_rect_transform,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -3370,7 +3370,7 @@ foldout: base_script.fold_component);
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        status_icon: "icon_field_status",
+                        status_icon: "icon_dot",
                         status_icon_color: sp_trigger_action.objectReferenceValue == null ? Color.gray : XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         prop: sp_trigger_action,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -3382,7 +3382,7 @@ foldout: base_script.fold_component);
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        status_icon: "icon_field_status",
+                        status_icon: "icon_dot",
                         status_icon_color: sp_object_tracker.objectReferenceValue == null ? Color.gray : XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         prop: sp_object_tracker,
                         prop_margin: new RectOffset(0, 0, 5, 0));

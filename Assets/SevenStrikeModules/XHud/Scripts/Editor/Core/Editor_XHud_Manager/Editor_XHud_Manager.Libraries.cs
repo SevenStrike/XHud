@@ -45,7 +45,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 prop: sp_library_colors,
-                status_icon: "icon_field_status",
+                status_icon: "icon_dot",
                 status_icon_color: sp_library_colors.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
@@ -55,7 +55,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 prop: sp_library_curves,
-                status_icon: "icon_field_status",
+                status_icon: "icon_dot",
                 status_icon_color: sp_library_curves.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
@@ -65,7 +65,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 prop: sp_library_sounds,
-                status_icon: "icon_field_status",
+                status_icon: "icon_dot",
                 status_icon_color: sp_library_sounds.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
@@ -75,7 +75,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 prop: sp_library_textstyles,
-                status_icon: "icon_field_status",
+                status_icon: "icon_dot",
                 status_icon_color: sp_library_textstyles.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
@@ -85,7 +85,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 prop: sp_library_motions,
-                status_icon: "icon_field_status",
+                status_icon: "icon_dot",
                 status_icon_color: sp_library_motions.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
@@ -95,7 +95,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 prop: sp_library_transitions,
-                status_icon: "icon_field_status",
+                status_icon: "icon_dot",
                 status_icon_color: sp_library_transitions.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 

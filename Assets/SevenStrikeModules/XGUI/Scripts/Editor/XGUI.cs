@@ -551,6 +551,27 @@ namespace SevenStrikeModules.XGUI.Editor
         }
         /// <summary>
         /// 获取字体
+        /// 默认XGUI预制的字体包含：        
+        /// <list type="bullet">
+        ///     <item>
+        ///         <description>xg-bold</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>xg-heavy</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>xg-light</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>xg-medium</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>xg-regular</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>xg-thin</description>
+        ///     </item>
+        /// </list>
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>

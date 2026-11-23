@@ -987,7 +987,7 @@ MonoBehaviour:
     timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     duration: 1
     delay: 4.532
-    progress: 0.9934685
+    progress: 0
     text_cursor_blink_speed: 0.5
     text_cursor: '|'
     text_extended: 1

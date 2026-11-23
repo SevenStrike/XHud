@@ -51,7 +51,7 @@ namespace SevenStrikeModules.XHud.Editor
              //title_color: Color.white,
              title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_width: 100,
-             status_icon: "icon_field_status",
+             status_icon: "icon_dot",
              status_icon_color: sp_sf_canvas_scaler_screen_size.vector2Value != Vector2.zero ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
              prop: sp_sf_canvas_scaler_screen_size,
              prop_margin: new RectOffset(0, 0, 10, 10));
@@ -71,7 +71,7 @@ namespace SevenStrikeModules.XHud.Editor
              //title_color: Color.white,
              title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_width: 100,
-             //status_icon: "icon_field_status",
+             //status_icon: "icon_dot",
              //status_icon_color: CanvasMatchDir.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
              prop: sp_cv_match_dir,
              prop_margin: new RectOffset(0, 0, 10, 10));

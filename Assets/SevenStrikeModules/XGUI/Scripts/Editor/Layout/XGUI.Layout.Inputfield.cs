@@ -56,13 +56,19 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 该方法与 <see cref="gui_inputfield(Rect, string, string, XGUIFontSize, TextAnchor, Color, float, bool, XGUIFontSize, Vector2, float, Color, Font, FontStyle, TextAnchor, string, Color, float, RectOffset, RectOffset)"/> 
         /// 功能相同，但使用 <see cref="EditorGUILayout"/> 自动布局系统，无需手动指定矩形位置。
         /// </remarks>
-        public static string layout_inputfield(string prop = null, string title = null, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_color = default, float title_width = 0, bool text_wrap = true, XGUIFontSize field_fontsize = XGUIFontSize.M, Vector2 field_text_offset = default, float field_height = 20, RectOffset field_padding = default, RectOffset field_margin = default, Color field_text_color = default, Font field_text_font = null, FontStyle field_text_style = FontStyle.Normal, TextAnchor field_text_anchor = TextAnchor.UpperLeft, string status_icon = null, Color status_icon_color = default, float field_width = 0)
+        public static string layout_inputfield(string prop = null, string title = null, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_color = default, float title_width = 0, RectOffset title_padding = default, RectOffset title_margin = default, bool text_wrap = true, XGUIFontSize field_fontsize = XGUIFontSize.M, Vector2 field_text_offset = default, float field_height = 20, RectOffset field_padding = default, RectOffset field_margin = default, Color field_text_color = default, Font field_text_font = null, FontStyle field_text_style = FontStyle.Normal, TextAnchor field_text_anchor = TextAnchor.UpperLeft, string status_icon = null, Color status_icon_color = default, float field_width = 0)
         {
             if (field_padding == null)
                 field_padding = new RectOffset(0, 0, 0, 0);
 
             if (field_margin == null)
                 field_margin = new RectOffset(0, 0, 0, 0);
+
+            if (title_margin == null)
+                title_margin = new RectOffset(0, 0, 0, 0);
+
+            if (title_padding == null)
+                title_padding = new RectOffset(0, 0, 0, 0);
 
             if (title_color == Color.clear)
                 title_color = Color.white * 0.9f;
@@ -98,8 +104,9 @@ namespace SevenStrikeModules.XGUI.Editor
                     text: title,
                     size: title_size,
                     text_color: title_color,
-                    margin: new RectOffset(0, 0, 0, 0),
+                    margin: title_margin,
                     offset: new Vector2(0, 1),
+                    padding: title_padding,
                     clipping: TextClipping.Clip,
                     font_style: FontStyle.Normal,
                     width: title_width,

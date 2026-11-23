@@ -1639,7 +1639,7 @@ namespace SevenStrikeModules.XTween.Editor
                             title_color: Color.white,
                             title_hover_color: XTween_Dashboard.Theme_Primary,
                             title_width: 100,
-                            status_icon: "icon_field_status",
+                            status_icon: "icon_dot",
                             status_icon_color: sp_Target_PathTool.objectReferenceValue != null ? XTween_Dashboard.Theme_Primary : Color.black * 0.7f,
                             prop: sp_Target_PathTool,
                             prop_margin: new RectOffset(0, 0, 10, 10));
@@ -1662,7 +1662,7 @@ namespace SevenStrikeModules.XTween.Editor
                          title_color: Color.white,
                          title_hover_color: XTween_Dashboard.Theme_Primary,
                          title_width: 100,
-                         status_icon: "icon_field_status",
+                         status_icon: "icon_dot",
                          status_icon_color: sp_Target_RectTransform.objectReferenceValue != null ? XTween_Dashboard.Theme_Primary : Color.black * 0.7f,
                          prop: sp_Target_RectTransform,
                          prop_margin: new RectOffset(0, 0, 10, 10));
@@ -1685,7 +1685,7 @@ namespace SevenStrikeModules.XTween.Editor
                        title_color: Color.white,
                        title_hover_color: XTween_Dashboard.Theme_Primary,
                        title_width: 100,
-                       status_icon: "icon_field_status",
+                       status_icon: "icon_dot",
                        status_icon_color: sp_Target_Image.objectReferenceValue != null ? XTween_Dashboard.Theme_Primary : Color.black * 0.7f,
                        prop: sp_Target_Image,
                        prop_margin: new RectOffset(0, 0, 10, 10));
@@ -1708,7 +1708,7 @@ namespace SevenStrikeModules.XTween.Editor
                             title_color: Color.white,
                             title_hover_color: XTween_Dashboard.Theme_Primary,
                             title_width: 100,
-                            status_icon: "icon_field_status",
+                            status_icon: "icon_dot",
                             status_icon_color: sp_Target_CanvasGroup.objectReferenceValue != null ? XTween_Dashboard.Theme_Primary : Color.black * 0.7f,
                             prop: sp_Target_CanvasGroup,
                             prop_margin: new RectOffset(0, 0, 10, 10));
@@ -1731,7 +1731,7 @@ namespace SevenStrikeModules.XTween.Editor
                             title_color: Color.white,
                             title_hover_color: XTween_Dashboard.Theme_Primary,
                             title_width: 100,
-                            status_icon: "icon_field_status",
+                            status_icon: "icon_dot",
                             status_icon_color: sp_Target_Text.objectReferenceValue != null ? XTween_Dashboard.Theme_Primary : Color.black * 0.7f,
                             prop: sp_Target_Text,
                             prop_margin: new RectOffset(0, 0, 10, 10));
@@ -1754,7 +1754,7 @@ namespace SevenStrikeModules.XTween.Editor
                             title_color: Color.white,
                             title_hover_color: XTween_Dashboard.Theme_Primary,
                             title_width: 100,
-                            status_icon: "icon_field_status",
+                            status_icon: "icon_dot",
                             status_icon_color: sp_Target_TmpText.objectReferenceValue != null ? XTween_Dashboard.Theme_Primary : Color.black * 0.7f,
                             prop: sp_Target_TmpText,
                             prop_margin: new RectOffset(0, 0, 10, 10));
@@ -2116,7 +2116,7 @@ namespace SevenStrikeModules.XTween.Editor
                 //title_color: Color.white,
                 title_hover_color: XTween_Dashboard.Theme_Primary,
                 title_width: 100,
-                //status_icon: "icon_field_status",
+                //status_icon: "icon_dot",
                 //status_icon_color: Color.green,
                 title_anchor: TextAnchor.MiddleLeft,
                 prop: prop_from,
@@ -2129,7 +2129,7 @@ namespace SevenStrikeModules.XTween.Editor
                 //title_color: Color.white,
                 title_hover_color: XTween_Dashboard.Theme_Primary,
                 title_width: 100,
-                //status_icon: "icon_field_status",
+                //status_icon: "icon_dot",
                 //status_icon_color: Color.green,
                 title_anchor: TextAnchor.MiddleLeft,
                 prop: prop_end,
@@ -2145,7 +2145,7 @@ namespace SevenStrikeModules.XTween.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XTween_Dashboard.Theme_Primary,
                 title_width: title_width,
-                //status_icon: "icon_field_status",
+                //status_icon: "icon_dot",
                 //status_icon_color: Color.green,
                 prop: prop,
                 prop_margin: new RectOffset(0, 0, 10, 10));
@@ -2162,7 +2162,7 @@ namespace SevenStrikeModules.XTween.Editor
               //title_color: Color.white,
               title_hover_color: XTween_Dashboard.Theme_Primary,
               title_width: title_width,
-              //status_icon: "icon_field_status",
+              //status_icon: "icon_dot",
               //status_icon_color: Color.green,
               prop: prop,
               prop_margin: new RectOffset(0, 0, 5, 0));

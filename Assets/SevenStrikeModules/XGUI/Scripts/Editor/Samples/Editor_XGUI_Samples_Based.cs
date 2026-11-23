@@ -116,7 +116,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             icons_slider = XGUI.GetIcon("Samples/Icons/icon_slider");
 
-            list_IndexIcon = XGUI.GetBasedIcon("icon_field_status");
+            list_IndexIcon = XGUI.GetBasedIcon("icon_dot");
 
             EaseNames = new string[] { "InBack", "InBounce", "InCirc", "InCubic", "InElastic", "InExpo", "InOutBack", "InOutBounce", "InOutCirc", "InOutCubic", "InOutElastic", "InOutExpo", "InOutQuad", "InOutQuart", "InOutQuint", "InOutSine", "InQuad", "InQuart", "InQuint", "InSine", "Linear", "None", "OutBack", "OutBounce", "OutCirc", "OutCubic", "OutElastic", "OutExpo", "OutQuad", "OutQuart", "OutQuint", "OutSine" };
 
@@ -653,7 +653,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 btn_color: BaseScript.ThemeColor_Primary,
                 btn_fontsize: XGUIFontSize.M,
                 default_name: "default",
-                status_icon: "icon_field_status",
+                status_icon: "icon_dot",
                 status_icon_color: XGUI_Utilitys.PathExists(BaseScript._configPath) ? Color.green : Color.red,
                 on_path_changed: (val) =>
                 {
@@ -682,7 +682,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     btn_color: BaseScript.ThemeColor_Primary,
                     btn_fontsize: XGUIFontSize.M,
                     default_name: null,
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: XGUI_Utilitys.PathExists(BaseScript._filePath) ? Color.green : Color.red,
                     on_path_changed: (val) =>
                     {
@@ -711,7 +711,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     btn_color: BaseScript.ThemeColor_Primary,
                     btn_fontsize: XGUIFontSize.M,
                     default_name: null,
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: XGUI_Utilitys.PathExists(BaseScript._outputPath) ? Color.green : Color.red,
                     on_path_changed: (val) =>
                     {
@@ -772,7 +772,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     btn_color: BaseScript.ThemeColor_Primary,
                     btn_fontsize: XGUIFontSize.M,
                     default_name: "default",
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: XGUI_Utilitys.PathExists(BaseScript._filePath_manual) ? Color.yellow : Color.red,
                     on_path_changed: (val) =>
                     {
@@ -803,7 +803,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     btn_color: BaseScript.ThemeColor_Primary,
                     btn_fontsize: XGUIFontSize.M,
                     default_name: null,
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: XGUI_Utilitys.PathExists(BaseScript._configPath_manual) ? Color.yellow : Color.red,
                     on_path_changed: (val) =>
                     {
@@ -1627,7 +1627,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     title_size: XGUIFontSize.M,
                     title_anchor: TextAnchor.MiddleLeft,
                     //title_color: Color.white,
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.green,
                     prop_margin: new RectOffset(0, 0, 5, 0));
 
@@ -1640,7 +1640,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     title_size: XGUIFontSize.M,
                     title_anchor: TextAnchor.MiddleLeft,
                     //title_color: Color.white,
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.red,
                     prop_margin: new RectOffset(0, 0, 5, 0));
 
@@ -1653,7 +1653,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     title_size: XGUIFontSize.M,
                     title_anchor: TextAnchor.MiddleLeft,
                     //title_color: Color.white,
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.cyan,
                     prop_margin: new RectOffset(0, 0, 5, 0));
 
@@ -1669,7 +1669,7 @@ namespace SevenStrikeModules.XGUI.Editor
                   //title_color: Color.white,
                   min_field_color: Color.white,
                   max_field_color: Color.white,
-                  status_icon: "icon_field_status",
+                  status_icon: "icon_dot",
                   status_icon_color: Color.yellow,
                   shrink_text_color: Color.white * 0.65f,
                   control_limite: 210,
@@ -1707,7 +1707,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     field_text_font: XGUI.GetFont("xg-medium"),
                     field_text_style: FontStyle.Normal,
                     field_text_anchor: TextAnchor.MiddleLeft,
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.green);
 
                 BaseScript.field_string = XGUI.layout_inputfield(
@@ -1724,7 +1724,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     field_text_font: XGUI.GetFont("xg-medium"),
                     field_text_style: FontStyle.Normal,
                     field_text_anchor: TextAnchor.UpperLeft,
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.green);
 
                 BaseScript.field_float = XGUI.layout_inputfield(
@@ -1740,7 +1740,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     field_text_font: XGUI.GetFont("xg-medium"),
                     field_text_style: FontStyle.Normal,
                     field_text_anchor: TextAnchor.MiddleLeft,
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.green);
 
                 BaseScript.field_int = XGUI.layout_inputfield(
@@ -1756,7 +1756,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     field_text_font: XGUI.GetFont("xg-medium"),
                     field_text_style: FontStyle.Normal,
                     field_text_anchor: TextAnchor.MiddleLeft,
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.green);
 
                 BaseScript.field_vector2 = XGUI.layout_inputfield(
@@ -1768,7 +1768,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     title_width: 80,
                     field_padding: new RectOffset(0, 0, 0, 0),
                     field_margin: new RectOffset(0, 0, 5, 0),
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.green);
 
                 BaseScript.field_vector3 = XGUI.layout_inputfield(
@@ -1780,7 +1780,7 @@ namespace SevenStrikeModules.XGUI.Editor
                    title_width: 80,
                    field_padding: new RectOffset(0, 0, 0, 0),
                    field_margin: new RectOffset(0, 0, 5, 0),
-                   status_icon: "icon_field_status",
+                   status_icon: "icon_dot",
                     status_icon_color: Color.green);
 
                 BaseScript.field_vector4 = XGUI.layout_inputfield(
@@ -1792,7 +1792,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     title_width: 80,
                     field_padding: new RectOffset(0, 0, 0, 0),
                     field_margin: new RectOffset(0, 0, 5, 0),
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.green);
 
                 BaseScript.field_color = XGUI.layout_inputfield(
@@ -1804,7 +1804,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     title_width: 80,
                     field_padding: new RectOffset(0, 0, 0, 0),
                     field_margin: new RectOffset(0, 0, 5, 0),
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.green);
 
                 BaseScript.field_curve = XGUI.layout_inputfield(
@@ -1816,7 +1816,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     title_width: 80,
                     field_padding: new RectOffset(0, 0, 0, 0),
                     field_margin: new RectOffset(0, 0, 5, 0),
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.green);
             }
 
@@ -1856,7 +1856,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     field_height: 20,
                     field_text_color: Color.white,
                     title_width: 40,
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.green,
                     field_text_font: XGUI.GetFont("xg-medium"),
                     field_text_style: FontStyle.Normal,
@@ -1876,7 +1876,7 @@ namespace SevenStrikeModules.XGUI.Editor
                      field_height: 80,
                      field_text_color: Color.white,
                      title_width: 40,
-                     status_icon: "icon_field_status",
+                     status_icon: "icon_dot",
                      status_icon_color: Color.magenta,
                      field_text_font: XGUI.GetFont("xg-medium"),
                      field_text_style: FontStyle.Normal,
@@ -1898,7 +1898,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     field_text_font: XGUI.GetFont("xg-medium"),
                     field_text_style: FontStyle.Normal,
                     field_text_anchor: TextAnchor.MiddleLeft,
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.red,
                     field_padding: new RectOffset(5, 5, 0, 0),
                     field_margin: new RectOffset(0, 0, 0, 0));
@@ -1917,7 +1917,7 @@ namespace SevenStrikeModules.XGUI.Editor
                      field_text_font: XGUI.GetFont("xg-medium"),
                      field_text_style: FontStyle.Normal,
                      field_text_anchor: TextAnchor.MiddleLeft,
-                     status_icon: "icon_field_status",
+                     status_icon: "icon_dot",
                      status_icon_color: Color.red,
                      field_padding: new RectOffset(5, 5, 0, 0),
                      field_margin: new RectOffset(0, 0, 0, 0));
@@ -1932,7 +1932,7 @@ namespace SevenStrikeModules.XGUI.Editor
                      //title_color: Color.white,
                      title_anchor: TextAnchor.MiddleLeft,
                      title_width: 40,
-                     status_icon: "icon_field_status",
+                     status_icon: "icon_dot",
                      status_icon_color: Color.red);
 
                 rect_field.y += margin;
@@ -1945,7 +1945,7 @@ namespace SevenStrikeModules.XGUI.Editor
                      //title_color: Color.white,
                      title_anchor: TextAnchor.MiddleLeft,
                      title_width: 40,
-                     status_icon: "icon_field_status",
+                     status_icon: "icon_dot",
                      status_icon_color: Color.red);
 
                 rect_field.y += margin;
@@ -1958,7 +1958,7 @@ namespace SevenStrikeModules.XGUI.Editor
                      //title_color: Color.white,
                      title_anchor: TextAnchor.MiddleLeft,
                      title_width: 40,
-                     status_icon: "icon_field_status",
+                     status_icon: "icon_dot",
                      status_icon_color: Color.red);
 
                 rect_field.y += margin;
@@ -1971,7 +1971,7 @@ namespace SevenStrikeModules.XGUI.Editor
                      //title_color: Color.white,
                      title_anchor: TextAnchor.MiddleLeft,
                      title_width: 40,
-                     status_icon: "icon_field_status",
+                     status_icon: "icon_dot",
                      status_icon_color: Color.red);
 
                 rect_field.y += margin;
@@ -1984,7 +1984,7 @@ namespace SevenStrikeModules.XGUI.Editor
                      //title_color: Color.white,
                      title_anchor: TextAnchor.MiddleLeft,
                      title_width: 40,
-                     status_icon: "icon_field_status",
+                     status_icon: "icon_dot",
                      status_icon_color: Color.red);
 
                 rect_field.y += margin;
@@ -1997,7 +1997,7 @@ namespace SevenStrikeModules.XGUI.Editor
                      //title_color: Color.white,
                      title_anchor: TextAnchor.MiddleLeft,
                      title_width: 40,
-                     status_icon: "icon_field_status",
+                     status_icon: "icon_dot",
                      status_icon_color: Color.red);
             }
 
@@ -2049,7 +2049,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     title_anchor: TextAnchor.MiddleLeft,
                     title_color: Color.white,
                     title_width: 60,
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.red,
                     prop: BaseScript.param_slider_manual,
                     left: 0,
@@ -2076,7 +2076,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     title_anchor: TextAnchor.MiddleLeft,
                     title_color: Color.white,
                     title_width: 60,
-                    status_icon: "icon_field_status",
+                    status_icon: "icon_dot",
                     status_icon_color: Color.green,
                     limite_width: 230,
                     slider_height: 20,
@@ -2112,7 +2112,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     title: "颜色-次级",
                     title_width: 80,
                     //title_color: Color.white,
-                    icon: "icon_field_status",
+                    icon: "icon_dot",
                     icon_color: Color.red,
                     state_title: "Hex：",
                     state_value: $"#{XGUI_Utilitys.Color_To_HexString(BaseScript.param_color)}",
@@ -2149,7 +2149,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     title: "颜色-主体",
                     title_width: 80,
                     //title_color: Color.white,
-                    icon: "icon_field_status",
+                    icon: "icon_dot",
                     icon_color: Color.red,
                     state_title: "Hex：",
                     state_value: $"#{XGUI_Utilitys.Color_To_HexString(BaseScript.param_color)}",
@@ -2163,7 +2163,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     title: "颜色-侧翼",
                     title_width: 80,
                     //title_color: Color.white,
-                    icon: "icon_field_status",
+                    icon: "icon_dot",
                     icon_color: Color.red,
                     state_title: "Hex：",
                     state_value: $"#{XGUI_Utilitys.Color_To_HexString(BaseScript.field_color)}",
@@ -2201,7 +2201,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     title: "曲线-运动",
                     title_width: 60,
                     //title_color: Color.white,
-                    icon: "icon_field_status",
+                    icon: "icon_dot",
                     icon_color: Color.green,
                     state_title: "说明：",
                     state_value: $"#{XGUI_Utilitys.Color_To_HexString(BaseScript.param_color)}",
@@ -2218,7 +2218,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     title: "曲线-转向",
                     title_width: 60,
                     //title_color: Color.white,
-                    icon: "icon_field_status",
+                    icon: "icon_dot",
                     icon_color: Color.green,
                     state_title: "说明：",
                     state_value: $"#{XGUI_Utilitys.Color_To_HexString(BaseScript.field_color)}",
@@ -2294,7 +2294,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: BaseScript.ThemeColor_Primary,
                 title_width: width,
-                status_icon: status_color == Color.clear ? null : "icon_field_status",
+                status_icon: status_color == Color.clear ? null : "icon_dot",
                 status_icon_color: status_color,
                 prop: prop,
                 prop_margin: new RectOffset(0, 0, 5, 10));
@@ -2310,7 +2310,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: BaseScript.ThemeColor_Primary,
                 title_width: 80,
-                status_icon: "icon_field_status",
+                status_icon: "icon_dot",
                 status_icon_color: Color.red,
                 prop: prop);
         }

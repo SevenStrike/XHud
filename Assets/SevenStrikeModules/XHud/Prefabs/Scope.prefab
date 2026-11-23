@@ -38,11 +38,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3141893240754762256}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 126.6, y: -404}
-  m_SizeDelta: {x: 738.7, y: 70.2}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 738.69995, y: 70.20001}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &3929604278141804968
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -84,11 +84,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u4EFB\u52A1\u4FE1\u606F\uFF1A"
+  m_Text: "\u4EFB\u52A1\u4FE1\u606F\uFF1A\u4EFB\u52A1\u4FE1\u606F\uFF1A\u4EFB\u52A1\u4FE1\u606F\uFF1A"
   indicator: 
   style_name: BasicTextStyle
   style_library_synching: 0
-  previous_text: "\u4EFB\u52A1\u4FE1\u606F\uFF1A"
+  previous_text: "\u4EFB\u52A1\u4FE1\u606F\uFF1A\u4EFB\u52A1\u4FE1\u606F\uFF1A\u4EFB\u52A1\u4FE1\u606F\uFF1A"
   text_is_changed: 0
   sync_global_font_size: 1
   text_color_owner: 2
@@ -334,12 +334,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 3902099935940337274}
   primitive_features:
-    position: {x: 126.6, y: -404, z: 0}
+    position: {x: 0, y: 0, z: 0}
     euler: {x: -0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
     alpha: 1
     color: {r: 0.41176474, g: 0.71110374, b: 1, a: 1}
-    size: {x: 738.7, y: 70.2}
+    size: {x: 738.69995, y: 70.20001}
     fill: 0
   first_save_features: 1
   debug: 0
@@ -570,7 +570,7 @@ MonoBehaviour:
     timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     duration: 1
     delay: 4.532
-    progress: 0.99261665
+    progress: 0
     text_cursor_blink_speed: 0.5
     text_cursor: '|'
     text_extended: 1
@@ -935,11 +935,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3141893240754762256}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 492, y: 492}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0.000030517578}
+  m_SizeDelta: {x: 346.37, y: 346.4}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &3077325663351724641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1068,12 +1068,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 1581488714526541206}
   primitive_features:
-    position: {x: 0, y: 0, z: 0}
+    position: {x: 0, y: 0.000030517578, z: 0}
     euler: {x: -0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
     alpha: 1
     color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-    size: {x: 492, y: 492}
+    size: {x: 346.37, y: 346.4}
     fill: 1
   first_save_features: 1
   debug: 0
@@ -1370,7 +1370,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5755098906041804970}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -1774,11 +1774,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3141893240754762256}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 8.5, y: -321}
-  m_SizeDelta: {x: 502.5, y: 60.0569}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 502.5, y: 60.056885}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &9001394214252907755
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1807,7 +1807,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: ASDFER
+  m_text: ASDFERASDFERASDFERASD
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 06a874562f73bbe43984745e24b818c0, type: 2}
   m_sharedMaterial: {fileID: 669065259414783338, guid: 06a874562f73bbe43984745e24b818c0, type: 2}
@@ -1881,8 +1881,8 @@ MonoBehaviour:
   indicator: 
   style_name: NewTextStyle_1_TmpText
   style_library_synching: 0
-  previous_text: ASDFER
-  text_is_changed: 0
+  previous_text: ASDFERASDFERASDFERASDFERASDFERASDF
+  text_is_changed: 1
   sync_global_font_size: 1
   text_color_owner: 2
   text_style_info:
@@ -2128,12 +2128,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 830724219823893641}
   primitive_features:
-    position: {x: 8.5, y: -321, z: 0}
+    position: {x: 0, y: 0, z: 0}
     euler: {x: -0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
     alpha: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    size: {x: 502.5, y: 60.0569}
+    color: {r: 1, g: 1, b: 1, a: 0.9999908}
+    size: {x: 502.5, y: 60.056885}
     fill: 0
   first_save_features: 1
   debug: 0

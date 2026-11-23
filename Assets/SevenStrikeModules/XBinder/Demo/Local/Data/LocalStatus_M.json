@@ -1,0 +1,134 @@
+{
+    "title": "Device Status M",
+    "sub": "Local Data",
+    "cooling": 57,
+    "cpu": "high / 76c / 4.9 ghz",
+    "keyboard": "pluged / razer huntsman",
+    "memory": "896 GB / 8192 GB",
+    "monitor": "Samsung Odyssey G9 VA 240 Hz",
+    "mouse": "razer viper ultimate",
+    "wifi": "wifi 6e / D-LINK - X60",
+    "speed": 215,
+    "voltage": "12 v / 78 ma",
+    "fan_title": "Fans Args",
+    "screen_resolution_v2": {
+        "x": 5120.0,
+        "y": 1440.0
+    },
+    "cursor_position_v2": {
+        "x": 2500.0,
+        "y": 700.0
+    },
+    "panel_offset_v2": {
+        "x": -32.0,
+        "y": 18.0
+    },
+    "camera_position_v3": {
+        "x": 5.0,
+        "y": 2.8,
+        "z": -6.0
+    },
+    "device_rotation_v3": {
+        "x": 30.0,
+        "y": 200.0,
+        "z": 5.0
+    },
+    "gravity_vector_v3": {
+        "x": 0.0,
+        "y": -9.81,
+        "z": 0.0
+    },
+    "rotation_v4": {
+        "x": 0.0,
+        "y": 0.3827,
+        "z": 0.0,
+        "w": 0.9239
+    },
+    "quaternion_v4": {
+        "x": 0.0,
+        "y": 0.3827,
+        "z": 0.0,
+        "w": 0.9239
+    },
+    "rect_value": {
+        "serializedVersion": "2",
+        "x": 25.0,
+        "y": 5.0,
+        "width": 3.0,
+        "height": 8.0
+    },
+    "rectoffset_value": {
+        "m_Left": 31,
+        "m_Right": 56,
+        "m_Top": 21,
+        "m_Bottom": 84
+    },
+    "color_tint_v4": {
+        "x": 0.85,
+        "y": 0.15,
+        "z": 0.45,
+        "w": 0.95
+    },
+    "uv_scale_offset_v4": {
+        "x": 3.5,
+        "y": 3.5,
+        "z": 0.15,
+        "w": 0.85
+    },
+    "theme_primary_color": {
+        "r": 0.9,
+        "g": 0.1,
+        "b": 0.4,
+        "a": 1.0
+    },
+    "status_led_color": {
+        "r": 1.0,
+        "g": 0.85,
+        "b": 0.0,
+        "a": 1.0
+    },
+    "warning_overlay_color": {
+        "r": 1.0,
+        "g": 0.4,
+        "b": 0.0,
+        "a": 0.8
+    },
+    "panel_background_color": {
+        "r": 0.12,
+        "g": 0.08,
+        "b": 0.12,
+        "a": 1.0
+    },
+    "text_highlight_color": {
+        "r": 1.0,
+        "g": 0.9,
+        "b": 0.7,
+        "a": 1.0
+    },
+    "fan_rpm": 2900,
+    "fan_mode": "auto / turbo",
+    "fan_count": 5,
+    "power_draw_wat": 135.0,
+    "uptime_seconds": 3200000,
+    "is_charging": false,
+    "last_sync_time": "2025-11-17T05:40:00Z",
+    "firmware_version": "v3.8.0",
+    "device_id": "xs-device-0012",
+    "sensor_labels": [
+        "cpu",
+        "gpu",
+        "ram",
+        "ssd",
+        "vrm"
+    ],
+    "temperature_history": [
+        72,
+        76,
+        74,
+        73,
+        72,
+        71,
+        70,
+        69
+    ]
+}

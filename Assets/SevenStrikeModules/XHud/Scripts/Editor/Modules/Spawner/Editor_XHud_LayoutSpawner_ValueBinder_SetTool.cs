@@ -200,10 +200,10 @@
         private ElementBinder CopyValueBinder(ElementBinder source)
         {
             ElementBinder dest = new ElementBinder();
-            dest.ID = source.ID;
-            dest.Name = source.Name;
-            dest.IsExpanded = false;
-            dest.IsEnabled = source.IsEnabled;
+            dest.id = source.id;
+            dest.name = source.name;
+            dest.is_expanded = false;
+            dest.is_enabled = source.is_enabled;
 
             if (source.binders != null)
             {
@@ -226,8 +226,8 @@
         private PrimitiveBinder CopyValueBinderType(PrimitiveBinder source)
         {
             PrimitiveBinder dest = new PrimitiveBinder();
-            dest.ID = source.ID;
-            dest.Name = source.Name;
+            dest.id = source.id;
+            dest.name = source.name;
             dest.val_string = source.val_string;
             dest.val_sprite = source.val_sprite;
             dest.val_texture = source.val_texture;
@@ -248,7 +248,7 @@
             {
                 if (!foldoutStates.ContainsKey(i))
                 {
-                    foldoutStates[i] = valuebinders[i].IsExpanded;
+                    foldoutStates[i] = valuebinders[i].is_expanded;
                 }
             }
 
@@ -285,7 +285,7 @@
                 {
                     EditorApplication.delayCall += () =>
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 布局元素数据绑定器通知", "移除元素绑定数据", $"确定要移除名称为 \"{valuebinders[list.index].Name}\" 的元素绑定数据吗？", "移除", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 布局元素数据绑定器通知", "移除元素绑定数据", $"确定要移除名称为 \"{valuebinders[list.index].name}\" 的元素绑定数据吗？", "移除", "暂不", 0);
                         if (res == "暂不")
                             return;
 
@@ -402,15 +402,15 @@
             // 从字典获取折叠状态，如果字典中没有则从 binder 读取并同步到字典
             if (!foldoutStates.ContainsKey(index))
             {
-                foldoutStates[index] = binder.IsExpanded;
+                foldoutStates[index] = binder.is_expanded;
             }
-            binder.IsExpanded = foldoutStates[index];
+            binder.is_expanded = foldoutStates[index];
 
             #region 绘制折叠箭头
-            bool newExpanded = EditorGUI.Foldout(new Rect(rect.x + 6, currentY + 2, 16, 16), binder.IsExpanded, GUIContent.none);
-            if (newExpanded != binder.IsExpanded)
+            bool newExpanded = EditorGUI.Foldout(new Rect(rect.x + 6, currentY + 2, 16, 16), binder.is_expanded, GUIContent.none);
+            if (newExpanded != binder.is_expanded)
             {
-                binder.IsExpanded = newExpanded;                    // 修改副本
+                binder.is_expanded = newExpanded;                    // 修改副本
                 foldoutStates[index] = newExpanded;             // 更新字典
                 valuebinders[index] = binder;                   // 关键：将修改后的副本写回列表
 
@@ -427,10 +427,10 @@
             #endregion
 
             #region 是否启用绑定
-            bool IsEnabled = EditorGUI.Toggle(new Rect(rect.x + 28, currentY + 2, 16, 16), binder.IsEnabled);
-            if (IsEnabled != binder.IsEnabled)
+            bool IsEnabled = EditorGUI.Toggle(new Rect(rect.x + 28, currentY + 2, 16, 16), binder.is_enabled);
+            if (IsEnabled != binder.is_enabled)
             {
-                binder.IsEnabled = IsEnabled;                    // 修改副本              
+                binder.is_enabled = IsEnabled;                    // 修改副本              
                 valuebinders[index] = binder;                   // 关键：将修改后的副本写回列表               
             }
             #endregion
@@ -448,10 +448,10 @@
             style_textfield.fontSize = 12;
             style_textfield.fontStyle = FontStyle.Bold;
             style_textfield.padding = new RectOffset(style_textfield.padding.left + 5, style_textfield.padding.right + 5, style_textfield.padding.top, style_textfield.padding.bottom);
-            string newID = EditorGUI.TextField(new Rect(rect.x + 80, currentY + 2, 60, 20), binder.ID, style_textfield);
-            if (newID != binder.ID)
+            string newID = EditorGUI.TextField(new Rect(rect.x + 80, currentY + 2, 60, 20), binder.id, style_textfield);
+            if (newID != binder.id)
             {
-                binder.ID = newID;
+                binder.id = newID;
                 valuebinders[index] = binder;
             }
             #endregion
@@ -459,7 +459,7 @@
             #region 定位
             if (Editor_XHud_GUI.Gui_Button(new Rect(rect.x + 160, currentY - 4, 40, 30), icon_locate_small_r, icon_locate_small_p, true, "", "", Color.white))
             {
-                XHud_Module_Element target = targetBinder.layoutspawner.GetElement_With_ID(valuebinders[index].ID);
+                XHud_Module_Element target = targetBinder.layoutspawner.GetElement_With_ID(valuebinders[index].id);
 
                 if (target == null)
                     return;
@@ -473,7 +473,7 @@
             #endregion
 
             #region 元素Name
-            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + (rect.width - 190), currentY + 2, 150, 18), binder.Name, HudFilled.无, HudColor.无, XHud_Dashboard.themes_get_color(ThemeColorType.primary), TextAnchor.MiddleRight, 12, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + (rect.width - 190), currentY + 2, 150, 18), binder.name, HudFilled.无, HudColor.无, XHud_Dashboard.themes_get_color(ThemeColorType.primary), TextAnchor.MiddleRight, 12, Font_Light);
             #endregion
 
             #region 绘制索引标签（右侧）
@@ -483,7 +483,7 @@
             currentY += 30;
 
             // 如果折叠，到此结束
-            if (!binder.IsExpanded)
+            if (!binder.is_expanded)
                 return;
 
             #region 子项区域
@@ -588,7 +588,7 @@
             {
                 EditorApplication.delayCall += () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 布局元素数据绑定器通知", "移除图元绑定数据", $"确定要移除 \"{valuebinders[parentIndex].binders[childIndex].Name}\" 的图元绑定数据吗？", "移除", "暂不", 0);
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 布局元素数据绑定器通知", "移除图元绑定数据", $"确定要移除 \"{valuebinders[parentIndex].binders[childIndex].name}\" 的图元绑定数据吗？", "移除", "暂不", 0);
                     if (res == "暂不")
                         return;
 
@@ -604,12 +604,12 @@
             if (Editor_XHud_GUI.Gui_Button(new Rect(rect.x + rect.width - 46, rect.y + rect.height - 60, 50, 50), icon_locate_r, icon_locate_p, true, "", "", Color.white))
             {
                 // 开始瞄准
-                XHud_Module_Element target = targetBinder.layoutspawner.GetElement_With_ID(XHudSpace.屏幕空间, binder.ID);
+                XHud_Module_Element target = targetBinder.layoutspawner.GetElement_With_ID(XHudSpace.屏幕空间, binder.id);
 
                 if (target == null)
                     return;
 
-                XHud_Module_Primitive_Controller prim = target.GetPrimitiveController_With_ID(binderItem.ID);
+                XHud_Module_Primitive_Controller prim = target.GetPrimitiveController_With_ID(binderItem.id);
 
                 EditorGUIUtility.PingObject(prim.gameObject);
                 Selection.activeObject = prim.gameObject;
@@ -634,17 +634,17 @@
             style_prop_value.fontStyle = FontStyle.Normal;
 
             #region 图元Name
-            Editor_XHud_GUI.Gui_Labelfield(new Rect(currentX + 50, currentY, labelWidth, 18), binderItem.Name, HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.MiddleLeft, 12, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield(new Rect(currentX + 50, currentY, labelWidth, 18), binderItem.name, HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.MiddleLeft, 12, Font_Light);
             #endregion
 
             currentY += 26;
 
             #region 图元ID 
             EditorGUI.LabelField(new Rect(currentX + 25, currentY + 2, labelWidth, 18), "ID", style_prop_name);
-            string newID = EditorGUI.TextField(new Rect(currentX + 25 + labelWidth, currentY + 1, fieldWidth, 18), binderItem.ID, style_prop_value);
-            if (newID != binderItem.ID)
+            string newID = EditorGUI.TextField(new Rect(currentX + 25 + labelWidth, currentY + 1, fieldWidth, 18), binderItem.id, style_prop_value);
+            if (newID != binderItem.id)
             {
-                binderItem.ID = newID;
+                binderItem.id = newID;
                 binder.binders[childIndex] = binderItem;
                 valuebinders[parentIndex] = binder;
             }
@@ -711,8 +711,8 @@
         private void AddBinder_Element()
         {
             ElementBinder newBinder = new ElementBinder();
-            newBinder.ID = $"xxxx";
-            newBinder.IsExpanded = true;
+            newBinder.id = $"xxxx";
+            newBinder.is_expanded = true;
             newBinder.binders = new PrimitiveBinder[0];
             valuebinders.Add(newBinder);
 
@@ -729,9 +729,9 @@
         private ElementBinder AddBinder_Element(string id, string name)
         {
             ElementBinder newBinder = new ElementBinder();
-            newBinder.ID = $"{id}";
-            newBinder.Name = $"{name}";
-            newBinder.IsExpanded = true;
+            newBinder.id = $"{id}";
+            newBinder.name = $"{name}";
+            newBinder.is_expanded = true;
             newBinder.binders = new PrimitiveBinder[0];
             valuebinders.Add(newBinder);
 
@@ -788,7 +788,7 @@
 
             // 创建新的子项
             PrimitiveBinder newItem = new PrimitiveBinder();
-            newItem.ID = $"xxxx";
+            newItem.id = $"xxxx";
             newItem.val_string = "";
             newItem.val_sprite = null;
             newItem.val_texture = null;
@@ -863,7 +863,7 @@
             for (int i = 0; i < valuebinders.Count; i++)
             {
                 ElementBinder e_binder = valuebinders[i];
-                e_binder.IsExpanded = false;
+                e_binder.is_expanded = false;
 
                 targetBinder.valuebinders[i] = CopyValueBinder(valuebinders[i]);
             }
@@ -981,7 +981,7 @@
                 {
                     var e_binder = valuebinders[i];
 
-                    if (e_binder.ID != item.id)
+                    if (e_binder.id != item.id)
                         continue;
 
                     // 过滤掉无效的 binder
@@ -990,7 +990,7 @@
                     {
                         if (item.spawned_element_node.element != null)
                         {
-                            var con = item.spawned_element_node.element.GetPrimitiveController_With_ID(binder.ID);
+                            var con = item.spawned_element_node.element.GetPrimitiveController_With_ID(binder.id);
                             if (con != null)
                                 validBinders.Add(binder);
                         }
@@ -1200,17 +1200,17 @@
                 BindList.Add(ele_binder);
 
                 // 如果绑定了那么久完善未绑定的图元
-                if (ele_binder.ID == item.id)
+                if (ele_binder.id == item.id)
                 {
-                    if (string.IsNullOrEmpty(ele_binder.Name) || ele_binder.Name != item.spawn_name)
-                        ele_binder.Name = item.spawn_name;
+                    if (string.IsNullOrEmpty(ele_binder.name) || ele_binder.name != item.spawn_name)
+                        ele_binder.name = item.spawn_name;
 
                     if (ele != null)
                     {
                         ele_binder = BindValue_Primitives(ele_binder, ele);
                     }
 
-                    ele_binder.IsExpanded = true;
+                    ele_binder.is_expanded = true;
 
                     valuebinders[i] = ele_binder;
 
@@ -1240,7 +1240,7 @@
                 }
                 else
                 {
-                    ele_binder.IsExpanded = false;
+                    ele_binder.is_expanded = false;
 
                     valuebinders[i] = ele_binder;
                 }
@@ -1308,15 +1308,15 @@
                 bool exist = false;
                 for (int a = 0; a < prim_binders.Count; a++)
                 {
-                    if (prim_binders[a].ID == con.id)
+                    if (prim_binders[a].id == con.id)
                     {
                         PrimitiveBinder binder = prim_binders[a];
 
                         exist = true;
                         // 如果图元绑定关系已存在，则根据情况更新绑定名称
-                        if (prim_binders[a].Name != con.transform.name)
+                        if (prim_binders[a].name != con.transform.name)
                         {
-                            binder.Name = con.transform.name;
+                            binder.name = con.transform.name;
                         }
 
                         if (binder.type == ModuleType.Image)
@@ -1381,8 +1381,8 @@
                 if (!exist)
                 {
                     PrimitiveBinder p_binder = new PrimitiveBinder();
-                    p_binder.Name = con.transform.name;
-                    p_binder.ID = con.id;
+                    p_binder.name = con.transform.name;
+                    p_binder.id = con.id;
                     p_binder.type = con.GetModuleType();
 
                     if (p_binder.type == ModuleType.Image)
