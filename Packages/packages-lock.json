@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.sevenstrike.xgui": {
+      "version": "file:D:/P-Product/U-UnityCustomModules/XGUI/Project/Unity6/XGUI_UPM/com.sevenstrike.xgui",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
