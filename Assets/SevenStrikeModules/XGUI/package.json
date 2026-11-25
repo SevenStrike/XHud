@@ -1,0 +1,33 @@
+{
+  "name": "com.sevenstrike.xgui",
+  "displayName": "XGUI",
+  "version": "1.0.0",
+  "unity": "6000.0",
+  "unityRelease": "38f1",
+  "description": "XGUI 是一套面向 Unity Editor 扩展的界面可视化组件库，让工具窗口与 Inspector 面板快速拥有统一、精致的商业级外观。内置 17 种主题色与 5 种容器填充、20 余种可配置控件，涵盖可折叠分组、模态弹窗、三层堆叠卡片、虚拟滚动列表、状态与进度展示等常用界面模块；原生支持 SerializedProperty，多选混合态可一键统一。另附编辑器内动效预览（数值插值、序列帧、音效）、43 种缓动与特效曲线、6 款字重字体与 120+ 内置图标。自动布局与精确绘制两套 API 并存，可按需混用，从简单设置面板到完整工具窗口都能高效搭建。授权协议：GNU AGPL-3.0。",
+  "keywords": [
+    "unity",
+    "editor",
+    "gui",
+    "ui",
+    "tool",
+    "xgui",
+    "extension"
+  ],
+  "author": {
+    "name": "SevenStrike",
+    "url": "http://sevenstrike.com/"
+  },
+  "samples": [
+    {
+      "displayName": "Demo",
+      "description": "XGUI 组件演示资产：面板、分组、按钮、开关、滑块、颜色、曲线、列表与编辑器内动效预览。",
+      "path": "Samples~"
+    }
+  ],
+  "license": "AGPL-3.0",
+  "licensesUrl": "https://www.gnu.org/licenses/agpl-3.0.html",
+  "documentationUrl": "https://github.com/SevenStrike/XGUI_UPM/blob/main/README.md",
+  "changelogUrl": "https://github.com/SevenStrike/XGUI_UPM/blob/main/com.sevenstrike.xgui/CHANGELOG.md",
+  "dependencies": {}
+}

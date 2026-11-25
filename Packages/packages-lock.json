@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.sevenstrike.xgui": {
-      "version": "https://github.com/SevenStrike/XGUI.git?path=com.sevenstrike.xgui",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "c7d01e8863d6430487ae7c3f5190e9a279de1393"
-    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

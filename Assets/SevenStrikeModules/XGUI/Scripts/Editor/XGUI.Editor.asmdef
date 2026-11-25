@@ -1,0 +1,19 @@
+{
+    "name": "XGUI.Editor",
+    "rootNamespace": "SevenStrikeModules.XGUI.Editor",
+    "references": [
+        "XGUI.Runtime",
+        "UnityEditor.UI"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

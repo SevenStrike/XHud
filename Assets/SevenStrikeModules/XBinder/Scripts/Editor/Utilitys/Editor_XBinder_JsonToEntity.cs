@@ -25,6 +25,7 @@ namespace SevenStrikeModules.XBinder.Editor
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Runtime.InteropServices;
     using System.Text;
     using System.Text.RegularExpressions;
     using UnityEditor;
@@ -116,7 +117,7 @@ namespace SevenStrikeModules.XBinder.Editor
         [SerializeField] private int _maxClassNameLength = 40;
         #endregion
 
-        // 序列化属性
+        #region 序列化属性
         private SerializedProperty _fixStringifiedJsonProp;
         private SerializedProperty _cleanCommentsAndTrailingCommasProp;
         private SerializedProperty _handleMixedTypesProp;
@@ -128,6 +129,14 @@ namespace SevenStrikeModules.XBinder.Editor
         private SerializedProperty _singularizeArrayClassNamesProp;
         private SerializedProperty _maxClassNameLengthProp;
         private SerializedProperty _showAdvancedOptionsProp;
+        #endregion
+
+        #region 字段 - 图标
+        /// <summary>
+        /// 标题主图标
+        /// </summary>
+        private Texture2D icon_main;
+        #endregion
 
         #region 窗口入口
         /// <summary>
@@ -137,7 +146,7 @@ namespace SevenStrikeModules.XBinder.Editor
         public static void ShowWindow()
         {
             var window = GetWindow<Editor_XBinder_JsonToEntity>("Json 内容解析到 C# 实体类工具");
-            window.minSize = new Vector2(400, 650);
+            window.minSize = new Vector2(350, 650);
             window.maxSize = window.minSize;
         }
         #endregion
@@ -148,6 +157,7 @@ namespace SevenStrikeModules.XBinder.Editor
         /// </summary>
         private void OnEnable()
         {
+            #region 获取序列化属性
             _serializedObject = new SerializedObject(this);
             _jsonFileProp = _serializedObject.FindProperty(nameof(_jsonFile));
             _rootClassNameProp = _serializedObject.FindProperty(nameof(_rootClassName));
@@ -166,6 +176,11 @@ namespace SevenStrikeModules.XBinder.Editor
             _addSerializableAttributeProp = _serializedObject.FindProperty(nameof(_addSerializableAttribute));
             _singularizeArrayClassNamesProp = _serializedObject.FindProperty(nameof(_singularizeArrayClassNames));
             _maxClassNameLengthProp = _serializedObject.FindProperty(nameof(_maxClassNameLength));
+            #endregion
+
+            #region 获取图标
+            icon_main = XGUI.GetCustomIcon($"{XBinder_Dashboard.Get_Path_XBinder_GUIROOT()}gui_json_to_entity/icon_main");
+            #endregion
         }
         #endregion
 
@@ -178,6 +193,131 @@ namespace SevenStrikeModules.XBinder.Editor
             if (_serializedObject == null)
                 OnEnable();
             _serializedObject.Update();
+
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
+
+            #region 抬头
+            Rect rect = new Rect(0, 0, position.width, position.height);
+
+            // 图标
+            Rect rect_icon = new Rect(15, 15, icon_main.width, icon_main.height);
+            XGUI.gui_icon(
+            rect: rect_icon,
+                icon: icon_main,
+                padding: new RectOffset(0, 0, 0, 0),
+                border: new RectOffset(0, 0, 0, 0),
+                color: Color.white);
+
+            // 大标题
+            Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
+            XGUI.gui_label(
+                rect: rect_title,
+                text: new GUIContent("Json 转 C# 实体工具"),
+                text_color: Color.white,
+                size: XGUIFontSize.L,
+                clipping: clipping_ellipsis,
+                font: XGUI.GetFont("xg-heavy"));
+
+            // 分割线
+            Rect rect_seperate = new Rect(rect.x + 68, rect.y + 43, 200, 1);
+            XGUI.gui_seperator(
+                rect: rect_seperate,
+                thickness: 1,
+                color: XBinder_Dashboard.theme_sepline,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0));
+
+            // 小标题
+            Rect rect_subtitle = new Rect(rect.x + 18, rect.y + 53, rect.width, 30);
+            XGUI.gui_label(
+                rect: rect_subtitle,
+                text: new GUIContent("使用此工具快速分析json文件并创建c#实体"),
+                text_color: Color.white * 0.7f,
+                size: XGUIFontSize.M,
+                anchor: TextAnchor.UpperLeft,
+                clipping: clipping_ellipsis);
+            #endregion
+
+            XGUI.layout_space(100);
+
+            #region 参数
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIGroup.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XBinder_Dashboard.theme_group,
+                title: "参数",
+                title_size: XGUIFontSize.M,
+                title_text_color: XBinder_Dashboard.theme_primary,
+                title_clipping: TextClipping.Clip,
+                margin: new RectOffset(10, 10, 0, 0),
+                padding: new RectOffset(10, 10, 15, 15));
+
+            Rect rect_info = XGUI.GetLastRect();
+
+            #region Json 文件
+            XGUI.layout_property_field(
+                  title: "Json 文件",
+                  title_size: XGUIFontSize.M,
+                  title_hover_color: Color.white,
+                  title_width: 60,
+                  prop: _jsonFileProp,
+                  prop_padding: new RectOffset(0, 0, 0, 0),
+                  prop_margin: new RectOffset(0, 0, 0, 10));
+            #endregion
+
+            #region 根类名
+            XGUI.layout_property_field(
+                  title: "根类名",
+                  title_size: XGUIFontSize.M,
+                  title_hover_color: Color.white,
+                  title_width: 60,
+                  prop: _rootClassNameProp,
+                  prop_padding: new RectOffset(0, 0, 0, 0),
+                  prop_margin: new RectOffset(0, 0, 0, 10));
+            #endregion
+
+            #region 命名空间 (可空)
+            XGUI.layout_property_field(
+                  title: "命名空间 (可空)",
+                  title_size: XGUIFontSize.M,
+                  title_hover_color: Color.white,
+                  title_width: 60,
+                  prop: _namespaceNameProp,
+                  prop_padding: new RectOffset(0, 0, 0, 0),
+                  prop_margin: new RectOffset(0, 0, 0, 10));
+            #endregion
+
+            #region 输出文件夹
+            XGUI.layout_path_selector(
+                path_type: XGUIPathType.文件夹,
+                prop: ref _outputFolder,
+                title: "输出文件夹",
+                //title_color: Color.white,
+                title_width: 162,
+                text_wrap: false,
+                field_fontsize: XGUIFontSize.M,
+                field_text_offset: new Vector2(0, 0),
+                field_margin: new RectOffset(0, 0, 0, 0),
+                field_padding: new RectOffset(0, 0, 0, 0),
+                field_text_color: Color.white,
+                field_text_style: FontStyle.Normal,
+                field_text_anchor: TextAnchor.MiddleLeft,
+                filter: null,
+                filter_title: "选择文件夹",
+                btn_color: XBinder_Dashboard.theme_primary,
+                btn_fontsize: XGUIFontSize.M,
+                default_name: "default",
+                status_icon: "icon_dot",
+                status_icon_color: XGUI_Utilitys.PathExists(_outputFolder) ? Color.green : Color.red,
+                on_path_changed: (val) =>
+                {
+                    _outputFolder = val;
+                });
+            #endregion
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
 
             EditorGUILayout.Space(5);
             EditorGUILayout.LabelField("Json 转 C# 类实体结构生成工具", EditorStyles.boldLabel);

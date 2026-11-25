@@ -1738,6 +1738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   identifier: SectorEnergy
+  category_created: 0
   request_key: 32
   manual_request: 1
   request_interval: 1
