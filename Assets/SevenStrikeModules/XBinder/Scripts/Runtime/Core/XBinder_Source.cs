@@ -20,7 +20,6 @@
  */
 namespace SevenStrikeModules.XBinder
 {
-    using SevenStrikeModules.XBinder;
     using SevenStrikeModules.XGUI.Runtime;
     using System;
     using UnityEngine;
@@ -60,7 +59,7 @@ namespace SevenStrikeModules.XBinder
 
         #region 折叠
         public bool
-            fold_param = true,
+            fold_param = false,
             fold_category = true,
             fold_option = true,
             fold_state = true,

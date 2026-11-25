@@ -47,6 +47,10 @@ namespace SevenStrikeModules.XBinder
         /// </summary>
         [SerializeField] public string target_key = "";
         /// <summary>
+        /// 标识名称
+        /// </summary>
+        [SerializeField] public string identifier = "";
+        /// <summary>
         /// 防循环标记（供双向绑定使用）。
         /// <para/>
         /// 当该值为 true 时，表示当前正处于自身回写状态，应拦截 on_value_changed 向外派发。

@@ -23,36 +23,49 @@ namespace SevenStrikeModules.XBinder
     using System;
     using UnityEngine;
 
+    /// <summary>
+    /// Color 类型的双向同步适配器。
+    /// <para/>
+    /// 该类是 <see cref="XBinder_Adapter_Sync{T}"/> 针对 Color 类型的“叶子节点”实现。
+    /// 负责将 Color 类型的数据与 <see cref="XBinder_Category"/> 中的 Color 通道进行双向对接。
+    /// </summary>
     [Serializable]
     public class XBinder_Adapter_Sync_Color : XBinder_Adapter_Sync<Color>
     {
         /// <summary>
-        /// 注册 Color 监听
+        /// 向数据源注册 Color 监听。
+        /// <para/>
+        /// 由基类在成功绑定数据源时自动调用。
         /// </summary>
         protected override void subscribe()
         {
             category.subscribe_color(target_key, on_value_changed);
         }
-
         /// <summary>
-        /// 注销 Color 监听
+        /// 从数据源注销 Color 监听。
+        /// <para/>
+        /// 由基类在禁用、销毁或数据源断线时自动调用。
         /// </summary>
         protected override void unsubscribe()
         {
             category.unsubscribe_color(target_key, on_value_changed);
         }
-
         /// <summary>
-        /// 获取当前最新 Color 值
+        /// 获取数据源中该目标键的当前 Color 值。
+        /// <para/>
+        /// 由基类在初次绑定成功时调用，用于强制刷新初始 UI 状态。
         /// </summary>
+        /// <returns>当前 Color 值；若键不存在则返回 default(Color)</returns>
         public override Color get_value()
         {
             return category.get_color(target_key);
         }
-
         /// <summary>
-        /// 回写 Color 到 数据源
+        /// 将外部传入的 Color 值回写到数据源中。
+        /// <para/>
+        /// 由 <see cref="XBinder_Adapter_Sync{T}.push(T)"/> 触发，受 <c>_syncing</c> 闸门保护，避免双向循环死锁。
         /// </summary>
+        /// <param name="v">要写回的 Color 值</param>
         protected override void set_value(Color v)
         {
             category.set_color(target_key, v);

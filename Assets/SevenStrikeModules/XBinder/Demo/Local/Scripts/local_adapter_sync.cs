@@ -29,6 +29,24 @@ namespace SevenStrikeModules.XBinder.Example
         public XBinder_Adapter_Sync_Float adapter;
         public Slider slider;
 
+        #region 折叠
+        public bool
+            fold_param = false,
+            fold_based = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_param = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool param = true, bool based = true)
+        {
+            fold_param = param;
+            fold_based = based;
+        }
+        #endregion
+
         public void Awake()
         {
             adapter.target_category = GetComponentInParent<XBinder_Source>().identifier;
@@ -41,7 +59,6 @@ namespace SevenStrikeModules.XBinder.Example
             adapter.act_handle_category_destroyed += Adapter_act_on_category_destroyed;
             slider.onValueChanged.AddListener(slider_value_changed);
         }
-
 
         private void OnDisable()
         {

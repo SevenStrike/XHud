@@ -50,10 +50,14 @@ namespace SevenStrikeModules.XBinder.Example
         public local_fan_rotator rotator_shadow;
         #endregion
 
+        #region 折叠
+        public bool fold_components;
+        #endregion
+
         #region 生命周期
         private void Awake()
         {
-            target_category = GetComponentInParent<local_source>().identifier;
+            global_category = GetComponentInParent<local_source>().identifier;
         }
         /// <summary>
         /// 组件启用时注册事件并启动基类绑定。
@@ -69,7 +73,6 @@ namespace SevenStrikeModules.XBinder.Example
             on_color += handle_color;
             base.OnEnable();
         }
-
         /// <summary>
         /// 组件禁用时撤销事件并通知基类解绑。
         /// </summary>

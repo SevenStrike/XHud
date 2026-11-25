@@ -32,6 +32,24 @@ namespace SevenStrikeModules.XBinder.Example
         public string r_url = "http://192.168.1.8/";
         public string r_name;
 
+        #region 折叠
+        public bool
+            fold_param = false,
+            fold_based = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_param = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool param = true, bool based = true)
+        {
+            fold_param = param;
+            fold_based = based;
+        }
+        #endregion
+
         void Start()
         {
             Request();

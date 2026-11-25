@@ -1105,6 +1105,8 @@ MonoBehaviour:
   rect: {fileID: 355291128}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &355291130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1762,6 +1764,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   r_url: http://localhost:9090/data
   r_name: SectorEnergy
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &473586568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1811,7 +1815,11 @@ MonoBehaviour:
   - target_key: data
     target_category: 
     value_type: 11
-  target_category: SectorEnergy
+  global_category: 
+  identifier: 
+  fold_param: 0
+  fold_list: 1
+  fold_based: 1
   text_title: {fileID: 1734540315}
   text_sub: {fileID: 1533025844}
   text_mx_title: {fileID: 471089083}
@@ -1851,6 +1859,7 @@ MonoBehaviour:
   mx_seq: {fileID: 2122915098}
   rotator: {fileID: 1445498682}
   rotator_shadow: {fileID: 355291129}
+  fold_components: 1
 --- !u!1 &510749945
 GameObject:
   m_ObjectHideFlags: 0
@@ -4658,9 +4667,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9d35a663b6f7843aa2a2fa27ca8899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 0}
+  rect: {fileID: 1445498679}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!1 &1450627801
 GameObject:
   m_ObjectHideFlags: 0
@@ -6676,6 +6687,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adapter: {fileID: 2047065299}
   slider: {fileID: 2047065296}
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &2047065299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6690,6 +6703,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_category: SectorEnergy
   target_key: speed
+  identifier: 
+  fold_param: 0
+  fold_based: 1
 --- !u!1 &2061151127
 GameObject:
   m_ObjectHideFlags: 0
@@ -7115,6 +7131,8 @@ MonoBehaviour:
     - {fileID: 1508686239, guid: 6a56de099761a3341accf19e6ae29499, type: 3}
     - {fileID: -237472492, guid: 6a56de099761a3341accf19e6ae29499, type: 3}
   fps: 30
+  fold_param: 0
+  fold_based: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

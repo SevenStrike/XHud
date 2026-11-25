@@ -175,15 +175,15 @@ namespace SevenStrikeModules.XBinder.Editor
             #endregion
 
             #region 获取图标
-            icon_bus_logo = XGUI.GetCustomIcon($"{XBinder_Dashboard.Get_Path_XBinder_GUIROOT()}gui_bus_viewer/icon_main");
-            icon_help_r = XGUI.GetCustomIcon($"{XBinder_Dashboard.Get_Path_XBinder_GUIROOT()}gui_bus_viewer/icon_help_r");
-            icon_help_p = XGUI.GetCustomIcon($"{XBinder_Dashboard.Get_Path_XBinder_GUIROOT()}gui_bus_viewer/icon_help_p");
-            icon_topbar_update_r = XGUI.GetCustomIcon($"{XBinder_Dashboard.Get_Path_XBinder_GUIROOT()}gui_bus_viewer/icon_topbar_update_r");
-            icon_topbar_update_p = XGUI.GetCustomIcon($"{XBinder_Dashboard.Get_Path_XBinder_GUIROOT()}gui_bus_viewer/icon_topbar_update_p");
-            icon_items_snap_r = XGUI.GetCustomIcon($"{XBinder_Dashboard.Get_Path_XBinder_GUIROOT()}gui_bus_viewer/icon_items_snap_r");
-            icon_items_snap_p = XGUI.GetCustomIcon($"{XBinder_Dashboard.Get_Path_XBinder_GUIROOT()}gui_bus_viewer/icon_items_snap_p");
-            icon_item_checked = XGUI.GetCustomIcon($"{XBinder_Dashboard.Get_Path_XBinder_GUIROOT()}gui_bus_viewer/icon_item_checked");
-            icon_item = XGUI.GetCustomIcon($"{XBinder_Dashboard.Get_Path_XBinder_GUIROOT()}gui_bus_viewer/icon_item");
+            icon_bus_logo = XGUI.GetCustomIcon($"{XBinder_Dashboard.get_path_xbinder_gui()}gui_bus_viewer/icon_main");
+            icon_help_r = XGUI.GetCustomIcon($"{XBinder_Dashboard.get_path_xbinder_gui()}gui_bus_viewer/icon_help_r");
+            icon_help_p = XGUI.GetCustomIcon($"{XBinder_Dashboard.get_path_xbinder_gui()}gui_bus_viewer/icon_help_p");
+            icon_topbar_update_r = XGUI.GetCustomIcon($"{XBinder_Dashboard.get_path_xbinder_gui()}gui_bus_viewer/icon_topbar_update_r");
+            icon_topbar_update_p = XGUI.GetCustomIcon($"{XBinder_Dashboard.get_path_xbinder_gui()}gui_bus_viewer/icon_topbar_update_p");
+            icon_items_snap_r = XGUI.GetCustomIcon($"{XBinder_Dashboard.get_path_xbinder_gui()}gui_bus_viewer/icon_items_snap_r");
+            icon_items_snap_p = XGUI.GetCustomIcon($"{XBinder_Dashboard.get_path_xbinder_gui()}gui_bus_viewer/icon_items_snap_p");
+            icon_item_checked = XGUI.GetCustomIcon($"{XBinder_Dashboard.get_path_xbinder_gui()}gui_bus_viewer/icon_item_checked");
+            icon_item = XGUI.GetCustomIcon($"{XBinder_Dashboard.get_path_xbinder_gui()}gui_bus_viewer/icon_item");
             icon_warning = XGUI.GetBasedIcon("icon_warning_solid");
             icon_dot = XGUI.GetBasedIcon("icon_dot");
             #endregion

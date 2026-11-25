@@ -23,36 +23,49 @@ namespace SevenStrikeModules.XBinder
     using System;
     using UnityEngine;
 
+    /// <summary>
+    /// Vector2 类型的双向同步适配器。
+    /// <para/>
+    /// 该类是 <see cref="XBinder_Adapter_Sync{T}"/> 针对 Vector2 类型的“叶子节点”实现。
+    /// 负责将 Vector2 类型的数据与 <see cref="XBinder_Category"/> 中的 Vector2 通道进行双向对接。
+    /// </summary>
     [Serializable]
     public class XBinder_Adapter_Sync_Vector2 : XBinder_Adapter_Sync<Vector2>
     {
         /// <summary>
-        /// 注册 Vector2 监听
+        /// 向数据源注册 Vector2 监听。
+        /// <para/>
+        /// 由基类在成功绑定数据源时自动调用。
         /// </summary>
         protected override void subscribe()
         {
             category.subscribe_vector2(target_key, on_value_changed);
         }
-
         /// <summary>
-        /// 注销 Vector2 监听
+        /// 从数据源注销 Vector2 监听。
+        /// <para/>
+        /// 由基类在禁用、销毁或数据源断线时自动调用。
         /// </summary>
         protected override void unsubscribe()
         {
             category.unsubscribe_vector2(target_key, on_value_changed);
         }
-
         /// <summary>
-        /// 获取当前最新 Vector2 值
+        /// 获取数据源中该目标键的当前 Vector2 值。
+        /// <para/>
+        /// 由基类在初次绑定成功时调用，用于强制刷新初始 UI 状态。
         /// </summary>
+        /// <returns>当前 Vector2 值；若键不存在则返回 default(Vector2)</returns>
         public override Vector2 get_value()
         {
             return category.get_vector2(target_key);
         }
-
         /// <summary>
-        /// 回写 Vector2 到 数据源
+        /// 将外部传入的 Vector2 值回写到数据源中。
+        /// <para/>
+        /// 由 <see cref="XBinder_Adapter_Sync{T}.push(T)"/> 触发，受 <c>_syncing</c> 闸门保护，避免双向循环死锁。
         /// </summary>
+        /// <param name="v">要写回的 Vector2 值</param>
         protected override void set_value(Vector2 v)
         {
             category.set_vector2(target_key, v);

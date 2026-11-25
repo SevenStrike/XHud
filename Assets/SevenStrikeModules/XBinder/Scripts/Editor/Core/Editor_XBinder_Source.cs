@@ -140,7 +140,7 @@ namespace SevenStrikeModules.XBinder.Editor
             #endregion
 
             #region 图标获取
-            icon_main = XGUI.GetCustomIcon($"{XBinder_Dashboard.Get_Path_XBinder_GUIROOT()}gui_binder/icon_main");
+            icon_main = XGUI.GetCustomIcon($"{XBinder_Dashboard.get_path_xbinder_gui()}gui_binder/icon_main");
             #endregion
 
             Targets_Get();
@@ -260,6 +260,10 @@ namespace SevenStrikeModules.XBinder.Editor
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
+            #region 扩展面板
+            Draw_Extended();
+            #endregion
+
             #region 源脚本
             base_script.fold_based = XGUI.layout_group_start(
             type: XGUIContainerType.Vertical,
@@ -320,7 +324,7 @@ namespace SevenStrikeModules.XBinder.Editor
                 text_color: Color.white * 0.7f,
                 margin: new RectOffset(15, 15, 10, 10),
                 clipping: TextClipping.Clip,
-                wrap: true,
+                wrap: false,
                 font_style: FontStyle.Normal,
                 anchor: TextAnchor.MiddleCenter);
             }
@@ -368,6 +372,10 @@ namespace SevenStrikeModules.XBinder.Editor
                 #endregion
             }
         }
+        public virtual void Draw_Extended()
+        {
+
+        }
         private void Draw_Category()
         {
             var cat = base_script.category;
@@ -375,12 +383,13 @@ namespace SevenStrikeModules.XBinder.Editor
             if (cat == null)
             {
                 XGUI.layout_label(
-                    text: "数据源将在运行时（Awake）创建，进入 Play 模式后可查看数据源的内容。",
+                    text: "数据源将在运行时（Awake）创建\n进入 Play 模式后可查看数据源的内容。",
                     size: XGUIFontSize.S,
                     text_color: Color.white * 0.7f,
                     margin: new RectOffset(15, 15, 10, 10),
                     clipping: TextClipping.Clip,
-                    wrap: true,
+                    height: 45,
+                    wrap: false,
                     font_style: FontStyle.Normal,
                     anchor: TextAnchor.MiddleCenter);
                 return;

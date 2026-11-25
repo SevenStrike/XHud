@@ -22,36 +22,49 @@ namespace SevenStrikeModules.XBinder
 {
     using System;
 
+    /// <summary>
+    /// bool 类型的双向同步适配器。
+    /// <para/>
+    /// 该类是 <see cref="XBinder_Adapter_Sync{T}"/> 针对 bool 类型的“叶子节点”实现。
+    /// 负责将 bool 类型的数据与 <see cref="XBinder_Category"/> 中的 bool 通道进行双向对接。
+    /// </summary>
     [Serializable]
     public class XBinder_Adapter_Sync_Bool : XBinder_Adapter_Sync<bool>
     {
         /// <summary>
-        /// 注册 bool 监听
+        /// 向数据源注册 bool 监听。
+        /// <para/>
+        /// 由基类在成功绑定数据源时自动调用。
         /// </summary>
         protected override void subscribe()
         {
             category.subscribe_bool(target_key, on_value_changed);
         }
-
         /// <summary>
-        /// 注销 bool 监听
+        /// 从数据源注销 bool 监听。
+        /// <para/>
+        /// 由基类在禁用、销毁或数据源断线时自动调用。
         /// </summary>
         protected override void unsubscribe()
         {
             category.unsubscribe_bool(target_key, on_value_changed);
         }
-
         /// <summary>
-        /// 获取当前最新 bool 值
+        /// 获取数据源中该目标键的当前 bool 值。
+        /// <para/>
+        /// 由基类在初次绑定成功时调用，用于强制刷新初始 UI 状态。
         /// </summary>
+        /// <returns>当前 bool 值；若键不存在则返回 false</returns>
         public override bool get_value()
         {
             return category.get_bool(target_key);
         }
-
         /// <summary>
-        /// 回写 bool 到 数据源
+        /// 将外部传入的 bool 值回写到数据源中。
+        /// <para/>
+        /// 由 <see cref="XBinder_Adapter_Sync{T}.push(T)"/> 触发，受 <c>_syncing</c> 闸门保护，避免双向循环死锁。
         /// </summary>
+        /// <param name="v">要写回的 bool 值</param>
         protected override void set_value(bool v)
         {
             category.set_bool(target_key, v);

@@ -2584,7 +2584,11 @@ MonoBehaviour:
   - target_key: theme_primary_color
     target_category: 
     value_type: 5
-  target_category: 
+  global_category: 
+  identifier: 
+  fold_param: 1
+  fold_list: 1
+  fold_based: 1
   img_raw: {fileID: 648036234}
   img_gra: {fileID: 102796250}
   text_title: {fileID: 681659819}
@@ -2601,6 +2605,7 @@ MonoBehaviour:
   text_voltage: {fileID: 1809632880}
   rotator: {fileID: 1612445010}
   rotator_shadow: {fileID: 1723474102}
+  fold_components: 0
 --- !u!114 &80671475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5457,7 +5462,11 @@ MonoBehaviour:
   - target_key: theme_primary_color
     target_category: 
     value_type: 5
-  target_category: 
+  global_category: 
+  identifier: 
+  fold_param: 0
+  fold_list: 1
+  fold_based: 1
   img_raw: {fileID: 234829513}
   img_gra: {fileID: 1380453049}
   text_title: {fileID: 213981475}
@@ -5474,6 +5483,7 @@ MonoBehaviour:
   text_voltage: {fileID: 1231101400}
   rotator: {fileID: 1223424953}
   rotator_shadow: {fileID: 2036010882}
+  fold_components: 0
 --- !u!114 &158543435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6020,6 +6030,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adapter: {fileID: 175020863}
   slider: {fileID: 175020864}
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &175020863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6034,6 +6046,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_category: 
   target_key: speed
+  identifier: 
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &175020864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7121,7 +7136,11 @@ MonoBehaviour:
   - target_key: theme_primary_color
     target_category: 
     value_type: 5
-  target_category: 
+  global_category: 
+  identifier: 
+  fold_param: 1
+  fold_list: 1
+  fold_based: 1
   img_raw: {fileID: 1039104522}
   img_gra: {fileID: 158870674}
   text_title: {fileID: 1513977320}
@@ -7138,6 +7157,7 @@ MonoBehaviour:
   text_voltage: {fileID: 1414301785}
   rotator: {fileID: 1467529253}
   rotator_shadow: {fileID: 1617061330}
+  fold_components: 0
 --- !u!114 &206354969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8290,6 +8310,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adapter: {fileID: 242594707}
   slider: {fileID: 242594708}
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &242594707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8304,6 +8326,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_category: 
   target_key: speed
+  identifier: 
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &242594708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9809,7 +9834,11 @@ MonoBehaviour:
   - target_key: theme_primary_color
     target_category: 
     value_type: 5
-  target_category: 
+  global_category: 
+  identifier: 
+  fold_param: 1
+  fold_list: 1
+  fold_based: 1
   img_raw: {fileID: 287591411}
   img_gra: {fileID: 1781053951}
   text_title: {fileID: 368229350}
@@ -9826,6 +9855,7 @@ MonoBehaviour:
   text_voltage: {fileID: 1712126868}
   rotator: {fileID: 1234354164}
   rotator_shadow: {fileID: 532686856}
+  fold_components: 0
 --- !u!114 &285867949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11431,6 +11461,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adapter: {fileID: 338239377}
   slider: {fileID: 338239378}
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &338239377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11445,6 +11477,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_category: 
   target_key: speed
+  identifier: 
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &338239378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11624,6 +11659,8 @@ MonoBehaviour:
   rect: {fileID: 355291128}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &355291130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13863,7 +13900,11 @@ MonoBehaviour:
   - target_key: theme_primary_color
     target_category: 
     value_type: 5
-  target_category: 
+  global_category: 
+  identifier: 
+  fold_param: 1
+  fold_list: 1
+  fold_based: 1
   img_raw: {fileID: 1724549001}
   img_gra: {fileID: 1754820448}
   text_title: {fileID: 167694525}
@@ -13880,6 +13921,7 @@ MonoBehaviour:
   text_voltage: {fileID: 1239183355}
   rotator: {fileID: 609574563}
   rotator_shadow: {fileID: 666137363}
+  fold_components: 0
 --- !u!114 &424601840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14394,6 +14436,8 @@ MonoBehaviour:
   rect: {fileID: 430640054}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &430640056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15970,7 +16014,11 @@ MonoBehaviour:
   - target_key: theme_primary_color
     target_category: 
     value_type: 5
-  target_category: 
+  global_category: 
+  identifier: 
+  fold_param: 1
+  fold_list: 1
+  fold_based: 1
   img_raw: {fileID: 1409142612}
   img_gra: {fileID: 1821146460}
   text_title: {fileID: 1734540315}
@@ -15987,6 +16035,7 @@ MonoBehaviour:
   text_voltage: {fileID: 1849607366}
   rotator: {fileID: 1445498682}
   rotator_shadow: {fileID: 355291129}
+  fold_components: 0
 --- !u!1 &473831626
 GameObject:
   m_ObjectHideFlags: 0
@@ -16730,6 +16779,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adapter: {fileID: 491939009}
   slider: {fileID: 491939010}
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &491939009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16744,6 +16795,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_category: 
   target_key: speed
+  identifier: 
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &491939010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18004,6 +18058,8 @@ MonoBehaviour:
   rect: {fileID: 532686855}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &532686857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19706,9 +19762,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9d35a663b6f7843aa2a2fa27ca8899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 0}
+  rect: {fileID: 609574562}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &609574564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20878,6 +20936,8 @@ MonoBehaviour:
   rect: {fileID: 650343467}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &650343469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21364,6 +21424,8 @@ MonoBehaviour:
   rect: {fileID: 666137362}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &666137364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22956,9 +23018,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9d35a663b6f7843aa2a2fa27ca8899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 0}
+  rect: {fileID: 696479770}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &696479772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25102,6 +25166,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adapter: {fileID: 773927595}
   slider: {fileID: 773927596}
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &773927595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25116,6 +25182,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_category: 
   target_key: speed
+  identifier: 
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &773927596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27603,6 +27672,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adapter: {fileID: 899395412}
   slider: {fileID: 899395413}
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &899395412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27617,6 +27688,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_category: 
   target_key: speed
+  identifier: 
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &899395413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28075,7 +28149,11 @@ MonoBehaviour:
   - target_key: theme_primary_color
     target_category: 
     value_type: 5
-  target_category: 
+  global_category: 
+  identifier: 
+  fold_param: 1
+  fold_list: 1
+  fold_based: 1
   img_raw: {fileID: 850798649}
   img_gra: {fileID: 1396926251}
   text_title: {fileID: 1606093945}
@@ -28092,6 +28170,7 @@ MonoBehaviour:
   text_voltage: {fileID: 124400158}
   rotator: {fileID: 1250314285}
   rotator_shadow: {fileID: 650343468}
+  fold_components: 0
 --- !u!114 &904479397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28563,6 +28642,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adapter: {fileID: 915520878}
   slider: {fileID: 915520879}
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &915520878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28577,6 +28658,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_category: 
   target_key: speed
+  identifier: 
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &915520879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29449,9 +29533,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9d35a663b6f7843aa2a2fa27ca8899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 0}
+  rect: {fileID: 945716902}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &945716904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30601,6 +30687,8 @@ MonoBehaviour:
   rect: {fileID: 999929900}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &999929902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30887,7 +30975,11 @@ MonoBehaviour:
   - target_key: theme_primary_color
     target_category: 
     value_type: 5
-  target_category: 
+  global_category: 
+  identifier: 
+  fold_param: 1
+  fold_list: 1
+  fold_based: 1
   img_raw: {fileID: 812005622}
   img_gra: {fileID: 1978779606}
   text_title: {fileID: 1402727632}
@@ -30904,6 +30996,7 @@ MonoBehaviour:
   text_voltage: {fileID: 1117861734}
   rotator: {fileID: 2142141676}
   rotator_shadow: {fileID: 1629366743}
+  fold_components: 0
 --- !u!114 &1008160685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35075,7 +35168,11 @@ MonoBehaviour:
   - target_key: theme_primary_color
     target_category: 
     value_type: 5
-  target_category: 
+  global_category: 
+  identifier: 
+  fold_param: 1
+  fold_list: 1
+  fold_based: 1
   img_raw: {fileID: 1658581828}
   img_gra: {fileID: 464765988}
   text_title: {fileID: 927082471}
@@ -35092,6 +35189,7 @@ MonoBehaviour:
   text_voltage: {fileID: 1143928247}
   rotator: {fileID: 1364571419}
   rotator_shadow: {fileID: 1746702096}
+  fold_components: 0
 --- !u!114 &1140887030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37483,9 +37581,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9d35a663b6f7843aa2a2fa27ca8899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 0}
+  rect: {fileID: 1223424952}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1223424954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38119,9 +38219,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9d35a663b6f7843aa2a2fa27ca8899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 0}
+  rect: {fileID: 1234354163}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1234354165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38520,9 +38622,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9d35a663b6f7843aa2a2fa27ca8899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 0}
+  rect: {fileID: 1250314284}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1250314286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38695,6 +38799,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adapter: {fileID: 1251533755}
   slider: {fileID: 1251533756}
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1251533755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38709,6 +38815,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_category: 
   target_key: speed
+  identifier: 
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1251533756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41541,9 +41650,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9d35a663b6f7843aa2a2fa27ca8899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 0}
+  rect: {fileID: 1364571418}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1364571420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42429,6 +42540,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adapter: {fileID: 1391775158}
   slider: {fileID: 1391775159}
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1391775158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42443,6 +42556,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_category: 
   target_key: speed
+  identifier: 
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1391775159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43956,9 +44072,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9d35a663b6f7843aa2a2fa27ca8899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 0}
+  rect: {fileID: 1445498679}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!1 &1445969094
 GameObject:
   m_ObjectHideFlags: 0
@@ -44590,9 +44708,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9d35a663b6f7843aa2a2fa27ca8899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 0}
+  rect: {fileID: 1467529252}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1467529254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44725,7 +44845,11 @@ MonoBehaviour:
   - target_key: theme_primary_color
     target_category: 
     value_type: 5
-  target_category: 
+  global_category: 
+  identifier: 
+  fold_param: 1
+  fold_list: 1
+  fold_based: 1
   img_raw: {fileID: 1801498712}
   img_gra: {fileID: 1052066820}
   text_title: {fileID: 1540156921}
@@ -44742,6 +44866,7 @@ MonoBehaviour:
   text_voltage: {fileID: 111941257}
   rotator: {fileID: 1644577505}
   rotator_shadow: {fileID: 999929901}
+  fold_components: 0
 --- !u!114 &1467964315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44822,6 +44947,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adapter: {fileID: 1467974749}
   slider: {fileID: 1467974750}
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1467974749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44836,6 +44963,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_category: 
   target_key: speed
+  identifier: 
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1467974750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47303,6 +47433,8 @@ MonoBehaviour:
   rect: {fileID: 1577623250}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1577623252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48332,9 +48464,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9d35a663b6f7843aa2a2fa27ca8899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 0}
+  rect: {fileID: 1612445009}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1612445011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48738,6 +48872,8 @@ MonoBehaviour:
   rect: {fileID: 1617061329}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1617061331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49058,6 +49194,8 @@ MonoBehaviour:
   rect: {fileID: 1629366742}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1629366744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49489,9 +49627,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9d35a663b6f7843aa2a2fa27ca8899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 0}
+  rect: {fileID: 1644577504}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1644577506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52357,6 +52497,8 @@ MonoBehaviour:
   rect: {fileID: 1723474101}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1723474103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53443,6 +53585,8 @@ MonoBehaviour:
   rect: {fileID: 1746702095}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1746702097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53534,6 +53678,8 @@ MonoBehaviour:
   rect: {fileID: 1748909452}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1748909454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55772,7 +55918,11 @@ MonoBehaviour:
   - target_key: theme_primary_color
     target_category: 
     value_type: 5
-  target_category: 
+  global_category: 
+  identifier: 
+  fold_param: 1
+  fold_list: 1
+  fold_based: 1
   img_raw: {fileID: 645646656}
   img_gra: {fileID: 381553633}
   text_title: {fileID: 768400283}
@@ -55789,6 +55939,7 @@ MonoBehaviour:
   text_voltage: {fileID: 909218420}
   rotator: {fileID: 1840816405}
   rotator_shadow: {fileID: 430640055}
+  fold_components: 0
 --- !u!114 &1830866558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55864,9 +56015,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9d35a663b6f7843aa2a2fa27ca8899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 0}
+  rect: {fileID: 1840816404}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &1840816406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58536,7 +58689,11 @@ MonoBehaviour:
   - target_key: theme_primary_color
     target_category: 
     value_type: 5
-  target_category: 
+  global_category: 
+  identifier: 
+  fold_param: 1
+  fold_list: 1
+  fold_based: 1
   img_raw: {fileID: 1681068460}
   img_gra: {fileID: 1036486461}
   text_title: {fileID: 1734278817}
@@ -58553,6 +58710,7 @@ MonoBehaviour:
   text_voltage: {fileID: 61425828}
   rotator: {fileID: 696479771}
   rotator_shadow: {fileID: 1748909453}
+  fold_components: 0
 --- !u!114 &1946788280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61161,6 +61319,8 @@ MonoBehaviour:
   rect: {fileID: 2036010881}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &2036010883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61254,6 +61414,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adapter: {fileID: 2036705116}
   slider: {fileID: 2036705117}
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &2036705116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61268,6 +61430,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_category: 
   target_key: speed
+  identifier: 
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &2036705117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62604,6 +62769,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adapter: {fileID: 2093044627}
   slider: {fileID: 2093044628}
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &2093044627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62618,6 +62785,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_category: 
   target_key: speed
+  identifier: 
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &2093044628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63217,7 +63387,11 @@ MonoBehaviour:
   - target_key: theme_primary_color
     target_category: 
     value_type: 5
-  target_category: 
+  global_category: 
+  identifier: 
+  fold_param: 1
+  fold_list: 1
+  fold_based: 1
   img_raw: {fileID: 465840741}
   img_gra: {fileID: 760234758}
   text_title: {fileID: 1717573238}
@@ -63234,6 +63408,7 @@ MonoBehaviour:
   text_voltage: {fileID: 113020710}
   rotator: {fileID: 945716903}
   rotator_shadow: {fileID: 1577623251}
+  fold_components: 0
 --- !u!114 &2112965852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63389,6 +63564,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adapter: {fileID: 2126819091}
   slider: {fileID: 2126819092}
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &2126819091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63403,6 +63580,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target_category: 
   target_key: speed
+  identifier: 
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &2126819092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63889,9 +64069,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9d35a663b6f7843aa2a2fa27ca8899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 0}
+  rect: {fileID: 2142141675}
   speed: 1
   sm_speed: 1
+  fold_param: 0
+  fold_based: 1
 --- !u!114 &2142141677
 MonoBehaviour:
   m_ObjectHideFlags: 0

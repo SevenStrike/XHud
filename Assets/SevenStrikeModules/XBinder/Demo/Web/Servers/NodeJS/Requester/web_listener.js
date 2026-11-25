@@ -70,9 +70,17 @@ app.post('/data', (req, res) => {
     requestCount += 1;
     fileRequestCount[indexCode] = (fileRequestCount[indexCode] || 0) + 1;
 
+    // 当前时间（本地时区，YYYY-MM-DD HH:mm:ss）
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const timeStr =
+      `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ` +
+      `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+      
     console.log();
     console.log(
       `${C.gray}[网络请求] ------->> Json文件 = ${C.green}${indexCode}` +
+      `${C.gray}, 时间戳=${C.cyan}${timeStr}` +
       `${C.gray}, 内容长度=${C.yellow}${data.length}` +
       `${C.gray}, 总请求次数=${C.yellow}${requestCount}` +
       `${C.gray}, 该文件被请求=${C.cyan}${fileRequestCount[indexCode]}${C.gray}次${C.reset}`

@@ -27,10 +27,10 @@ namespace SevenStrikeModules.XBinder.Example.Editor
     using UnityEditor;
     using UnityEngine;
 
-    public class editor_web_server_launcher : EditorWindow
+    public class Editor_web_server_launcher : EditorWindow
     {
         // 你的 Node 项目相对路径（根据截图填写的）
-        private static string nodeProjectPath = $"{XBinder_Dashboard.Get_Path_XBinder_Demo()}Web/Servers/NodeJS/Requester";
+        private static string nodeProjectPath = $"Assets/Samples/XBinder/1.0.0/Demo/Web/Servers/NodeJS/Requester";
         private static string nodeEntryScript = "web_listener.js";
 
         [MenuItem("Tools/XBinder/网络数据源模拟服务")]

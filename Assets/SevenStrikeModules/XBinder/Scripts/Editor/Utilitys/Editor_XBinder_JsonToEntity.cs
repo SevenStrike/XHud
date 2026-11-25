@@ -25,7 +25,6 @@ namespace SevenStrikeModules.XBinder.Editor
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Runtime.InteropServices;
     using System.Text;
     using System.Text.RegularExpressions;
     using UnityEditor;
@@ -67,6 +66,10 @@ namespace SevenStrikeModules.XBinder.Editor
         /// </summary>
         private Vector2 _outputScroll;
         /// <summary>
+        /// 菜单面板索引
+        /// </summary>
+        private int panel_index;
+        /// <summary>
         /// 是否自动根据根类名生成文件名
         /// </summary>
         [SerializeField]
@@ -98,8 +101,6 @@ namespace SevenStrikeModules.XBinder.Editor
         #endregion
 
         #region 高级修复选项字段
-        [SerializeField] private bool _showAdvancedOptions = false;
-
         [Header("JSON 修复")]
         [SerializeField] private bool _fixStringifiedJson = true;
         [SerializeField] private bool _cleanCommentsAndTrailingCommas = true;
@@ -128,7 +129,6 @@ namespace SevenStrikeModules.XBinder.Editor
         private SerializedProperty _addSerializableAttributeProp;
         private SerializedProperty _singularizeArrayClassNamesProp;
         private SerializedProperty _maxClassNameLengthProp;
-        private SerializedProperty _showAdvancedOptionsProp;
         #endregion
 
         #region 字段 - 图标
@@ -138,15 +138,19 @@ namespace SevenStrikeModules.XBinder.Editor
         private Texture2D icon_main;
         #endregion
 
+        #region 折叠
+        private bool fold_option;
+        #endregion
+
         #region 窗口入口
         /// <summary>
         /// 打开窗口的菜单入口
         /// </summary>
-        [MenuItem("Tools/XBinder/根据 Json 内容解析到 C# 实体类")]
+        [MenuItem("Tools/XBinder/Json 解析到 C# 实体类工具")]
         public static void ShowWindow()
         {
-            var window = GetWindow<Editor_XBinder_JsonToEntity>("Json 内容解析到 C# 实体类工具");
-            window.minSize = new Vector2(350, 650);
+            var window = GetWindow<Editor_XBinder_JsonToEntity>("Json 解析到 C# 实体类工具");
+            window.minSize = new Vector2(350, 750);
             window.maxSize = window.minSize;
         }
         #endregion
@@ -165,7 +169,6 @@ namespace SevenStrikeModules.XBinder.Editor
             _outputFolderProp = _serializedObject.FindProperty(nameof(_outputFolder));
             _autoGenerateFileNameProp = _serializedObject.FindProperty(nameof(_autoGenerateFileName));
 
-            _showAdvancedOptionsProp = _serializedObject.FindProperty(nameof(_showAdvancedOptions));
             _fixStringifiedJsonProp = _serializedObject.FindProperty(nameof(_fixStringifiedJson));
             _cleanCommentsAndTrailingCommasProp = _serializedObject.FindProperty(nameof(_cleanCommentsAndTrailingCommas));
             _handleMixedTypesProp = _serializedObject.FindProperty(nameof(_handleMixedTypes));
@@ -179,7 +182,8 @@ namespace SevenStrikeModules.XBinder.Editor
             #endregion
 
             #region 获取图标
-            icon_main = XGUI.GetCustomIcon($"{XBinder_Dashboard.Get_Path_XBinder_GUIROOT()}gui_json_to_entity/icon_main");
+            icon_main = XGUI.GetCustomIcon($"{XBinder_Dashboard.get_path_xbinder_gui()}gui_json_to_entity/icon_main");
+            Debug.Log($"{XBinder_Dashboard.get_path_xbinder_gui()}gui_json_to_entity/icon_main");
             #endregion
         }
         #endregion
@@ -195,6 +199,8 @@ namespace SevenStrikeModules.XBinder.Editor
             _serializedObject.Update();
 
             TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
+
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XBinder_Dashboard.theme_primary, true);
 
             #region 抬头
             Rect rect = new Rect(0, 0, position.width, position.height);
@@ -240,195 +246,337 @@ namespace SevenStrikeModules.XBinder.Editor
 
             XGUI.layout_space(100);
 
-            #region 参数
+            panel_index = XGUI.layout_toolbar(
+                index: ref panel_index,
+                names: new string[] { "参数", "选项" },
+                bg_normal: XGUIGroup.纯色边框,
+                bg_selected: XGUIGroup.实体,
+                bg_color: XGUIColor.亮白,
+                bg_gui_color: Color.black * 0.5f,
+                text_color_normal: Color.white,
+                text_color_selected: XBinder_Dashboard.theme_primary,
+                bar_height: 25,
+                text_anchor: TextAnchor.MiddleCenter,
+                text_padding: new RectOffset(10, 10, 0, 4),
+                bar_margin: new RectOffset(18, 18, 0, 0),
+                bar_offset: new Vector2(0, 0),
+                text_offset: new Vector2(0, 0),
+                text_font: XGUI.GetFont("xg-regular"),
+                text_fontstyle: FontStyle.Normal,
+                bg_width_offset: 5,
+                bg_height_offset: 2,
+                navigate_style: true,
+                navigate_style_bg: XGUIGroup.纯色边框,
+                navigate_style_bg_color: Color.black * 0.5f);
+
+            if (panel_index == 0)
+            {
+                #region 参数
+                XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIGroup.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XBinder_Dashboard.theme_group,
+                    title: "参数",
+                    title_size: XGUIFontSize.M,
+                    title_text_color: XBinder_Dashboard.theme_primary,
+                    title_clipping: TextClipping.Clip,
+                    margin: new RectOffset(10, 10, 0, 0),
+                    padding: new RectOffset(10, 10, 15, 15));
+
+                #region 说明
+                string msg = $"拖入 <color={hexcol}>.json</color> 文件到窗口内，或通过选择框指定文件；点击 <color={hexcol}>生成 C# 代码</color> 预览，然后点击 <color={hexcol}>保存为 .cs 文件</color> 导出";
+
+                XGUI.layout_label(
+                    text: msg,
+                    bg_fill: XGUIGroup.实体,
+                    bg_color: XGUIColor.深空灰,
+                    size: XGUIFontSize.S,
+                    anchor: TextAnchor.MiddleLeft,
+                    text_color: Color.white * 0.85f,
+                    offset: new Vector2(0, 0),
+                    padding: new RectOffset(10, 10, 10, 10),
+                    margin: new RectOffset(0, 0, 6, 10),
+                    clipping: TextClipping.Clip,
+                    wrap: true,
+                    font: XGUI.GetFont("xg-regular"),
+                    font_style: FontStyle.Normal);
+                #endregion
+
+                #region Json 文件
+                XGUI.layout_property_field(
+                      title: "Json 文件",
+                      title_size: XGUIFontSize.M,
+                      title_hover_color: Color.white,
+                      title_width: 90,
+                      prop: _jsonFileProp,
+                      prop_padding: new RectOffset(0, 0, 0, 0),
+                      prop_margin: new RectOffset(0, 0, 0, 10));
+                #endregion
+
+                #region 根类名
+                XGUI.layout_property_field(
+                      title: "根类名",
+                      title_size: XGUIFontSize.M,
+                      title_hover_color: Color.white,
+                      title_width: 90,
+                      prop: _rootClassNameProp,
+                      prop_padding: new RectOffset(0, 0, 0, 0),
+                      prop_margin: new RectOffset(0, 0, 0, 10));
+                #endregion
+
+                #region 命名空间 (可空)
+                XGUI.layout_property_field(
+                      title: "命名空间 (可空)",
+                      title_size: XGUIFontSize.M,
+                      title_hover_color: Color.white,
+                      title_width: 90,
+                      prop: _namespaceNameProp,
+                      prop_padding: new RectOffset(0, 0, 0, 0),
+                      prop_margin: new RectOffset(0, 0, 0, 10));
+                #endregion
+
+                #region 输出文件夹
+                XGUI.layout_path_selector(
+                    path_type: XGUIPathType.文件夹,
+                    prop: ref _outputFolder,
+                    title: "输出文件夹",
+                    //title_color: Color.white,
+                    title_width: 162,
+                    text_wrap: false,
+                    field_fontsize: XGUIFontSize.M,
+                    field_text_offset: new Vector2(0, 0),
+                    field_margin: new RectOffset(0, 0, 0, 0),
+                    field_padding: new RectOffset(0, 0, 0, 0),
+                    field_text_color: Color.white,
+                    field_text_style: FontStyle.Normal,
+                    field_text_anchor: TextAnchor.MiddleLeft,
+                    filter: null,
+                    filter_title: "选择文件夹",
+                    btn_color: XBinder_Dashboard.theme_primary,
+                    btn_fontsize: XGUIFontSize.M,
+                    default_name: "default",
+                    status_icon: "icon_dot",
+                    status_icon_color: XGUI_Utilitys.PathExists(_outputFolder) ? Color.green : Color.red,
+                    on_path_changed: (val) =>
+                    {
+                        _outputFolder = val;
+
+                    });
+                if (!string.IsNullOrEmpty(_outputFolder))
+                {
+                    // 转成相对工程路径
+                    if (_outputFolder.StartsWith(Application.dataPath))
+                        _outputFolderProp.stringValue = "Assets" + _outputFolder.Substring(Application.dataPath.Length);
+                    else
+                        _outputFolderProp.stringValue = _outputFolder;
+                }
+                #endregion
+
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                #endregion
+            }
+            else if (panel_index == 1)
+            {
+                #region 选项
+                fold_option = XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIGroup.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XBinder_Dashboard.theme_group,
+                    title: "选项",
+                    title_size: XGUIFontSize.M,
+                    title_text_color: XBinder_Dashboard.theme_primary,
+                    title_clipping: TextClipping.Clip,
+                    margin: new RectOffset(10, 10, 0, 0),
+                    padding: new RectOffset(10, 10, 15, 15),
+                    foldout: fold_option);
+
+                if (!fold_option)
+                {
+                    #region 自动根据根类名生成文件名
+                    DrawToggle("自动根据根类名生成文件名", _autoGenerateFileNameProp, 150, XGUIToggleStyle.实体, XBinder_Dashboard.theme_primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                    #endregion
+
+                    #region 自动修复嵌套字符串 JSON
+                    DrawToggle("自动修复嵌套字符串 JSON", _fixStringifiedJsonProp, 150, XGUIToggleStyle.实体, XBinder_Dashboard.theme_primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                    #endregion
+
+                    #region 清理注释与尾随逗号
+                    DrawToggle("清理注释与尾随逗号", _cleanCommentsAndTrailingCommasProp, 150, XGUIToggleStyle.实体, XBinder_Dashboard.theme_primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                    #endregion
+
+                    #region 混用类型回退为 string
+                    DrawToggle("混用类型回退为 string", _handleMixedTypesProp, 150, XGUIToggleStyle.实体, XBinder_Dashboard.theme_primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                    #endregion
+
+                    #region 智能识别布尔值 (0/1, \"true\")")
+                    DrawToggle("智能识别布尔值 (0/1, \\\"true\\\")\")", _smartBoolDetectionProp, 150, XGUIToggleStyle.实体, XBinder_Dashboard.theme_primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                    #endregion
+
+                    #region 超长数字自动转 long
+                    DrawToggle("超长数字自动转 long", _useLongForLargeNumbersProp, 150, XGUIToggleStyle.实体, XBinder_Dashboard.theme_primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                    #endregion
+
+                    #region 小数自动转 float
+                    DrawToggle("小数自动转 float", _useFloatForDecimalsProp, 150, XGUIToggleStyle.实体, XBinder_Dashboard.theme_primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                    #endregion
+
+                    #region 空数组附加警告注释
+                    DrawToggle("空数组附加警告注释", _warnOnEmptyArrayProp, 150, XGUIToggleStyle.实体, XBinder_Dashboard.theme_primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                    #endregion
+
+                    #region 自动添加 [Serializable] 与 using
+                    DrawToggle("自动添加 [Serializable] 与 using", _addSerializableAttributeProp, 150, XGUIToggleStyle.实体, XBinder_Dashboard.theme_primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                    #endregion
+
+                    #region 数组字段类名单数化
+                    DrawToggle("数组字段类名单数化", _singularizeArrayClassNamesProp, 150, XGUIToggleStyle.实体, XBinder_Dashboard.theme_primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                    #endregion
+
+                    #region 类名最大长度
+                    DrawToggle("类名最大长度", _maxClassNameLengthProp, 150, XGUIToggleStyle.实体, XBinder_Dashboard.theme_primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                    #endregion
+                }
+
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                #endregion
+            }
+
+            #region 状态
             XGUI.layout_group_start(
-                type: XGUIContainerType.Vertical,
+            type: XGUIContainerType.Vertical,
+            bg_fill: XGUIGroup.缺口纯色边框,
+            bg_color: XGUIColor.亮白,
+            bg_color_gui: XBinder_Dashboard.theme_group,
+            title: "状态",
+            title_size: XGUIFontSize.M,
+            title_text_color: XBinder_Dashboard.theme_primary,
+            title_clipping: TextClipping.Clip,
+            margin: new RectOffset(10, 10, 0, 0),
+            padding: new RectOffset(10, 10, 15, 15));
+
+            XGUI.layout_helpbox(
+                state: _jsonFile == null ? XGUIHelboxState.警告 : XGUIHelboxState.通知,
+                title_text: _jsonFile == null ? "尚未选择 Json 文件。可将 .json 文件拖入本窗口，或使用上方的选择框指定！" : $"已选择: {AssetDatabase.GetAssetPath(_jsonFile)}\n大小: {_jsonFile.text.Length} 字符",
+                title_size: XGUIFontSize.M,
+                title_style: FontStyle.Normal,
+                wrap: true,
+                title_clipping: TextClipping.Clip,
+                title_color: Color.white * 0.75f);
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            #region 按钮
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XBinder_Dashboard.theme_group,
-                title: "参数",
+                title: "操作",
                 title_size: XGUIFontSize.M,
                 title_text_color: XBinder_Dashboard.theme_primary,
                 title_clipping: TextClipping.Clip,
                 margin: new RectOffset(10, 10, 0, 0),
                 padding: new RectOffset(10, 10, 15, 15));
 
-            Rect rect_info = XGUI.GetLastRect();
-
-            #region Json 文件
-            XGUI.layout_property_field(
-                  title: "Json 文件",
-                  title_size: XGUIFontSize.M,
-                  title_hover_color: Color.white,
-                  title_width: 60,
-                  prop: _jsonFileProp,
-                  prop_padding: new RectOffset(0, 0, 0, 0),
-                  prop_margin: new RectOffset(0, 0, 0, 10));
-            #endregion
-
-            #region 根类名
-            XGUI.layout_property_field(
-                  title: "根类名",
-                  title_size: XGUIFontSize.M,
-                  title_hover_color: Color.white,
-                  title_width: 60,
-                  prop: _rootClassNameProp,
-                  prop_padding: new RectOffset(0, 0, 0, 0),
-                  prop_margin: new RectOffset(0, 0, 0, 10));
-            #endregion
-
-            #region 命名空间 (可空)
-            XGUI.layout_property_field(
-                  title: "命名空间 (可空)",
-                  title_size: XGUIFontSize.M,
-                  title_hover_color: Color.white,
-                  title_width: 60,
-                  prop: _namespaceNameProp,
-                  prop_padding: new RectOffset(0, 0, 0, 0),
-                  prop_margin: new RectOffset(0, 0, 0, 10));
-            #endregion
-
-            #region 输出文件夹
-            XGUI.layout_path_selector(
-                path_type: XGUIPathType.文件夹,
-                prop: ref _outputFolder,
-                title: "输出文件夹",
-                //title_color: Color.white,
-                title_width: 162,
-                text_wrap: false,
-                field_fontsize: XGUIFontSize.M,
-                field_text_offset: new Vector2(0, 0),
-                field_margin: new RectOffset(0, 0, 0, 0),
-                field_padding: new RectOffset(0, 0, 0, 0),
-                field_text_color: Color.white,
-                field_text_style: FontStyle.Normal,
-                field_text_anchor: TextAnchor.MiddleLeft,
-                filter: null,
-                filter_title: "选择文件夹",
-                btn_color: XBinder_Dashboard.theme_primary,
-                btn_fontsize: XGUIFontSize.M,
-                default_name: "default",
-                status_icon: "icon_dot",
-                status_icon_color: XGUI_Utilitys.PathExists(_outputFolder) ? Color.green : Color.red,
-                on_path_changed: (val) =>
-                {
-                    _outputFolder = val;
-                });
-            #endregion
-
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-            #endregion
-
-            EditorGUILayout.Space(5);
-            EditorGUILayout.LabelField("Json 转 C# 类实体结构生成工具", EditorStyles.boldLabel);
-            EditorGUILayout.HelpBox(
-                "拖入 .json 文件到窗口内，或通过选择框指定文件；点击 [生成 C# 代码] 预览，然后点击 [保存为 .cs 文件] 导出。",
-                MessageType.Info);
-
-            EditorGUILayout.Space(5);
-
-            // ---- 配置区 ----
-            EditorGUILayout.BeginVertical("box");
-            EditorGUILayout.PropertyField(_jsonFileProp, new GUIContent("Json 文件"));
-            EditorGUILayout.PropertyField(_rootClassNameProp, new GUIContent("根类名"));
-            EditorGUILayout.PropertyField(_namespaceNameProp, new GUIContent("命名空间 (可空)"));
-
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PropertyField(_outputFolderProp, new GUIContent("输出文件夹"));
-            if (GUILayout.Button("...", GUILayout.Width(30)))
-            {
-                string selected = EditorUtility.OpenFolderPanel("选择输出文件夹", "Assets", "");
-                if (!string.IsNullOrEmpty(selected))
-                {
-                    // 转成相对工程路径
-                    if (selected.StartsWith(Application.dataPath))
-                        _outputFolderProp.stringValue = "Assets" + selected.Substring(Application.dataPath.Length);
-                    else
-                        _outputFolderProp.stringValue = selected;
-                }
-            }
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.PropertyField(_autoGenerateFileNameProp, new GUIContent("自动根据根类名生成文件名"));
-
-            EditorGUILayout.Space(5);
-            _showAdvancedOptions = EditorGUILayout.Foldout(_showAdvancedOptions, "高级修复选项", true, EditorStyles.foldoutHeader);
-            if (_showAdvancedOptions)
-            {
-                EditorGUILayout.BeginVertical("box");
-
-                EditorGUILayout.LabelField("JSON 修复", EditorStyles.boldLabel);
-                EditorGUILayout.PropertyField(_fixStringifiedJsonProp, new GUIContent("自动修复嵌套字符串 JSON"));
-                EditorGUILayout.PropertyField(_cleanCommentsAndTrailingCommasProp, new GUIContent("清理注释与尾随逗号"));
-                EditorGUILayout.PropertyField(_handleMixedTypesProp, new GUIContent("混用类型回退为 string"));
-                EditorGUILayout.PropertyField(_smartBoolDetectionProp, new GUIContent("智能识别布尔值 (0/1, \"true\")"));
-
-                EditorGUILayout.Space(3);
-                EditorGUILayout.LabelField("类型推断", EditorStyles.boldLabel);
-                EditorGUILayout.PropertyField(_useLongForLargeNumbersProp, new GUIContent("超长数字自动转 long"));
-                EditorGUILayout.PropertyField(_useFloatForDecimalsProp, new GUIContent("小数自动转 float"));
-                EditorGUILayout.PropertyField(_warnOnEmptyArrayProp, new GUIContent("空数组附加警告注释"));
-
-                EditorGUILayout.Space(3);
-                EditorGUILayout.LabelField("代码生成", EditorStyles.boldLabel);
-                EditorGUILayout.PropertyField(_addSerializableAttributeProp, new GUIContent("自动添加 [Serializable] 与 using"));
-                EditorGUILayout.PropertyField(_singularizeArrayClassNamesProp, new GUIContent("数组字段类名单数化"));
-                EditorGUILayout.PropertyField(_maxClassNameLengthProp, new GUIContent("类名最大长度"));
-
-                EditorGUILayout.EndVertical();
-            }
-
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.Space(5);
-
-            // ---- 文件内容状态提示 ----
-            if (_jsonFile == null)
-            {
-                EditorGUILayout.HelpBox("尚未选择 Json 文件。可将 .json 文件拖入本窗口，或使用上方的选择框指定。", MessageType.Warning);
-            }
-            else
-            {
-                EditorGUILayout.HelpBox($"已选择: {AssetDatabase.GetAssetPath(_jsonFile)}\n大小: {_jsonFile.text.Length} 字符", MessageType.None);
-            }
-
-            EditorGUILayout.Space(5);
-
-            // ---- 按钮区 ----
-            EditorGUILayout.BeginHorizontal();
-            GUI.backgroundColor = new Color(0.4f, 0.85f, 0.5f);
-            if (GUILayout.Button("生成 C# 代码", GUILayout.Height(30)))
+            #region 生成实体类
+            if (XGUI.layout_button(
+                text: "生成实体类",
+                tooltip: "",
+                bg_fill: XGUIGroup.实体,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XBinder_Dashboard.theme_primary,
+                button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XBinder_Dashboard.theme_primary) ? Color.black : Color.white,
+                press_fill: XGUIGroup.实体,
+                press_color: XGUIColor.深空灰,
+                press_text_color: Color.white,
+                font_size: XGUIFontSize.M,
+                anchor: TextAnchor.MiddleCenter,
+                height: 25,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                button_text_font: XGUI.GetFont("xg-medium")))
             {
                 GenerateCode();
             }
-            GUI.backgroundColor = Color.white;
+            #endregion
 
+            #region 保存实体类
             using (new EditorGUI.DisabledScope(string.IsNullOrEmpty(_generatedCode)))
             {
-                if (GUILayout.Button("保存为 .cs 文件", GUILayout.Height(30), GUILayout.Width(160)))
+                if (XGUI.layout_button(
+                    text: "保存实体类",
+                    tooltip: "",
+                    bg_fill: XGUIGroup.实体,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XBinder_Dashboard.theme_primary,
+                    button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XBinder_Dashboard.theme_primary) ? Color.black : Color.white,
+                    press_fill: XGUIGroup.实体,
+                    press_color: XGUIColor.深空灰,
+                    press_text_color: Color.white,
+                    font_size: XGUIFontSize.M,
+                    anchor: TextAnchor.MiddleCenter,
+                    height: 25,
+                    margin: new RectOffset(0, 0, 0, 0),
+                    padding: new RectOffset(0, 0, 0, 0),
+                    button_text_font: XGUI.GetFont("xg-medium")))
                 {
                     SaveToFile();
                 }
             }
+            #endregion
 
-            if (GUILayout.Button("清空", GUILayout.Height(30), GUILayout.Width(60)))
+            #region 清空
+            if (XGUI.layout_button(
+                text: "清空",
+                tooltip: "",
+                bg_fill: XGUIGroup.实体,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XBinder_Dashboard.theme_primary,
+                button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XBinder_Dashboard.theme_primary) ? Color.black : Color.white,
+                press_fill: XGUIGroup.实体,
+                press_color: XGUIColor.深空灰,
+                press_text_color: Color.white,
+                font_size: XGUIFontSize.M,
+                anchor: TextAnchor.MiddleCenter,
+                height: 25,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                button_text_font: XGUI.GetFont("xg-medium")))
             {
                 _generatedCode = "";
                 _jsonFile = null;
                 _serializedObject.Update();
             }
-            EditorGUILayout.EndHorizontal();
+            #endregion
 
-            EditorGUILayout.Space(5);
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+            #endregion
 
-            // ---- 输出预览区 ----
+            #region 实体类预览
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIGroup.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XBinder_Dashboard.theme_group,
+                title: "实体类预览",
+                title_size: XGUIFontSize.M,
+                title_text_color: XBinder_Dashboard.theme_primary,
+                title_clipping: TextClipping.Clip,
+                margin: new RectOffset(10, 10, 0, 10),
+                padding: new RectOffset(10, 10, 15, 15));
+
             if (!string.IsNullOrEmpty(_generatedCode))
             {
-                EditorGUILayout.LabelField("生成结果预览:", EditorStyles.boldLabel);
                 _outputScroll = EditorGUILayout.BeginScrollView(_outputScroll, GUILayout.ExpandHeight(true));
                 EditorGUILayout.TextArea(_generatedCode, GUILayout.ExpandHeight(true));
                 EditorGUILayout.EndScrollView();
             }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion         
 
             _serializedObject.ApplyModifiedProperties();
             HandleDragAndDrop();
@@ -676,6 +824,51 @@ namespace SevenStrikeModules.XBinder.Editor
             foreach (char c in Path.GetInvalidFileNameChars())
                 name = name.Replace(c, '_');
             return name;
+        }
+        #endregion
+
+        #region 绘制控件
+        /// <summary>
+        /// 通用方法：绘制开关。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>封装 <c>XGUI.layout_toggle</c> 的常用参数。</description></item>
+        /// <item><description>支持自定义开/关背景色、手柄色与变更回调。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="title">开关标题。</param>
+        /// <param name="prop">绑定的序列化属性。</param>
+        /// <param name="width">标题宽度。</param>
+        /// <param name="style">开关样式。</param>
+        /// <param name="color_bg_on">开启时背景色。</param>
+        /// <param name="color_bg_off">关闭时背景色。</param>
+        /// <param name="color_on">开启时手柄色。</param>
+        /// <param name="color_off">关闭时手柄色。</param>
+        /// <param name="act_on_changed">值变更回调。</param>
+        private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, Action<bool> act_on_changed = null)
+        {
+            XGUI.layout_toggle(
+                title: title,
+                title_size: XGUIFontSize.M,
+                title_font_style: FontStyle.Normal,
+                title_padding: new RectOffset(0, 10, 0, 0),
+                title_width: width,
+                prop: prop,
+                tog_style: style,
+                tog_padding: new RectOffset(5, 8, 0, 0),
+                tog_margin: new RectOffset(0, 0, 0, 5),
+                tog_mixed_options: new string[] { "禁用", "启用" },
+                tog_mixed_text_size: XGUIFontSize.M,
+                tog_mixed_text_color: Color.black,
+                tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                tog_mixed_font_style: FontStyle.Normal,
+                tog_bg_off_color: color_bg_off,
+                tog_bg_on_color: color_bg_on,
+                tog_handler_off_color: color_off,
+                tog_handler_on_color: color_on,
+                tog_mixed_bg_color_gui: XBinder_Dashboard.theme_primary,
+                act_on_changed: act_on_changed);
         }
         #endregion
     }

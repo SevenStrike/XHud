@@ -51,6 +51,24 @@ namespace SevenStrikeModules.XBinder
         public Action<string> act_handle_category_destroyed;
         #endregion
 
+        #region 折叠
+        public bool
+            fold_param = false,
+            fold_based = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_param = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool param = true, bool based = true)
+        {
+            fold_param = param;
+            fold_based = based;
+        }
+        #endregion
+
         #region 回写入口
         /// <summary>
         /// 外部逻辑回写数据到数据源。

@@ -49,7 +49,15 @@ namespace SevenStrikeModules.XBinder.Example
         public local_fan_rotator rotator_shadow;
         #endregion
 
+        #region 折叠
+        public bool fold_components;
+        #endregion
+
         #region 生命周期
+        private void Awake()
+        {
+            global_category = GetComponentInParent<web_source>().identifier;
+        }
         /// <summary>
         /// 组件启用时注册事件并启动基类绑定。
         /// </summary>

@@ -110,9 +110,36 @@ namespace SevenStrikeModules.XBinder
         /// <summary>
         /// 全局目标容器名。
         /// <para/>
-        /// 当 entry 未单独指定 target_category 时，使用此值作为默认容器。
+        /// 当 entry 未单独指定 global_category 时，使用此值作为默认容器。
         /// </summary>
-        public string target_category;
+        public string global_category;
+        /// <summary>
+        /// 全局目标容器名。
+        /// <para/>
+        /// 标识名称
+        /// </summary>
+        public string identifier;
+        #endregion
+
+        #region 折叠
+        public bool
+            fold_param = true,
+            fold_list = true,
+            fold_based = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_param = state;
+            fold_list = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool param = true, bool list = true, bool based = true)
+        {
+            fold_param = param;
+            fold_list = list;
+            fold_based = based;
+        }
         #endregion
 
         /// <summary>
@@ -252,11 +279,11 @@ namespace SevenStrikeModules.XBinder
                 var cfg = entries[i];
                 if (cfg == null) continue;
 
-                string tar_category = !string.IsNullOrEmpty(cfg.target_category) ? cfg.target_category : target_category;
+                string tar_category = !string.IsNullOrEmpty(cfg.target_category) ? cfg.target_category : global_category;
 
                 if (string.IsNullOrEmpty(cfg.target_category))
                 {
-                    XGUI_Utilitys.Console("XBinder 消息", $"[XBinder_Adapter_Multi] 绑定项 {cfg.target_key} 的 category_name 为空，使用全局目标容器名称 ：{target_category}", XGUIMsgState.确认);
+                    XGUI_Utilitys.Console("XBinder 消息", $"[XBinder_Adapter_Multi] 绑定项 {cfg.target_key} 的 category_name 为空，使用全局目标容器名称 ：{global_category}", XGUIMsgState.确认);
                 }
 
                 if (string.IsNullOrEmpty(tar_category))
@@ -307,7 +334,7 @@ namespace SevenStrikeModules.XBinder
         protected virtual void bind(bind_item item)
         {
             if (item.bound) return;
-            item.category = XBinder_Bus.get_category_by_name(!string.IsNullOrEmpty(item.cfg.target_category) ? item.cfg.target_category : target_category);
+            item.category = XBinder_Bus.get_category_by_name(!string.IsNullOrEmpty(item.cfg.target_category) ? item.cfg.target_category : global_category);
             if (item.category == null) return;
 
             subscribe(item);
@@ -476,7 +503,7 @@ namespace SevenStrikeModules.XBinder
                 var item = bind_items[i];
                 if (item.bound) continue;
 
-                string tar_category = !string.IsNullOrEmpty(item.cfg.target_category) ? item.cfg.target_category : target_category;
+                string tar_category = !string.IsNullOrEmpty(item.cfg.target_category) ? item.cfg.target_category : global_category;
 
                 // 修复：比较时拼上前缀，或者直接判断当前总线里有没有这个 category 了
                 if (!string.IsNullOrEmpty(tar_category) && created_name == $"xbinder_{tar_category}")

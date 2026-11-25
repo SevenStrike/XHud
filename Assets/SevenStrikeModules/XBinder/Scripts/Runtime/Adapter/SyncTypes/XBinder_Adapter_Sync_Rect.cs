@@ -23,36 +23,49 @@ namespace SevenStrikeModules.XBinder
     using System;
     using UnityEngine;
 
+    /// <summary>
+    /// Rect 类型的双向同步适配器。
+    /// <para/>
+    /// 该类是 <see cref="XBinder_Adapter_Sync{T}"/> 针对 Rect 类型的“叶子节点”实现。
+    /// 负责将 Rect 类型的数据与 <see cref="XBinder_Category"/> 中的 Rect 通道进行双向对接。
+    /// </summary>
     [Serializable]
     public class XBinder_Adapter_Sync_Rect : XBinder_Adapter_Sync<Rect>
     {
         /// <summary>
-        /// 注册 Rect 监听
+        /// 向数据源注册 Rect 监听。
+        /// <para/>
+        /// 由基类在成功绑定数据源时自动调用。
         /// </summary>
         protected override void subscribe()
         {
             category.subscribe_rect(target_key, on_value_changed);
         }
-
         /// <summary>
-        /// 注销 Rect 监听
+        /// 从数据源注销 Rect 监听。
+        /// <para/>
+        /// 由基类在禁用、销毁或数据源断线时自动调用。
         /// </summary>
         protected override void unsubscribe()
         {
             category.unsubscribe_rect(target_key, on_value_changed);
         }
-
         /// <summary>
-        /// 获取当前最新 Rect 值
+        /// 获取数据源中该目标键的当前 Rect 值。
+        /// <para/>
+        /// 由基类在初次绑定成功时调用，用于强制刷新初始 UI 状态。
         /// </summary>
+        /// <returns>当前 Rect 值；若键不存在则返回 default(Rect)</returns>
         public override Rect get_value()
         {
             return category.get_rect(target_key);
         }
-
         /// <summary>
-        /// 回写 Rect 到 数据源
+        /// 将外部传入的 Rect 值回写到数据源中。
+        /// <para/>
+        /// 由 <see cref="XBinder_Adapter_Sync{T}.push(T)"/> 触发，受 <c>_syncing</c> 闸门保护，避免双向循环死锁。
         /// </summary>
+        /// <param name="v">要写回的 Rect 值</param>
         protected override void set_value(Rect v)
         {
             category.set_rect(target_key, v);
