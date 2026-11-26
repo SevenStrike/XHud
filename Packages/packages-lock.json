@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.sevenstrike.xbinder": {
+      "version": "https://github.com/SevenStrike/XBinder.git?path=com.sevenstrike.xbinder",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "5c54ffe926007298494aebc57522bf99d7172dd1"
+    },
     "com.sevenstrike.xgui": {
       "version": "https://github.com/SevenStrike/XGUI.git?path=com.sevenstrike.xgui",
       "depth": 0,

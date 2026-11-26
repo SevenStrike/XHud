@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.sevenstrike.xbinder": "https://github.com/SevenStrike/XBinder.git?path=com.sevenstrike.xbinder",
     "com.sevenstrike.xgui": "https://github.com/SevenStrike/XGUI.git?path=com.sevenstrike.xgui",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.ai.navigation": "2.0.6",
